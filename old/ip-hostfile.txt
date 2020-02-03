@@ -1,0 +1,10 @@
+130.245.68.28: odroid-anrin
+130.245.68.54: odroid-yongmin
+130.245.68.56: odroid-ahmad
+130.245.68.62: odroid-nahid
+130.245.68.22: odroid-umit
+130.245.68.59: odroid-348
+130.245.70.14: odroid-aruna
+130.245.68.25: odroid-jayesh
+130.245.70.6: odroid64.localhost
+130.245.70.24: odroid-omkant
