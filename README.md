@@ -73,3 +73,10 @@ python 2
 |Update localization server configurations and run it|use vscode||
 |testing: run Tx|python tx-run-wrapper.py -n 1 -g 45 -mo test||
 |testing: run client|python realtime_testing.py -num 1 -src testbed-indoor -met our splot -avg 4 -wt 2 -en 1||
+
+## Introduction about GNU Radio and USRP
+[GNU Radio official wiki website](https://wiki.gnuradio.org/index.php/Main_Page)
+
+[Ettus Research homepage](https://kb.ettus.com/Knowledge_Base)
+
+[A master thesis](http://oa.upm.es/21618/1/TESIS_MASTER_LEI_ZHANG.pdf)
