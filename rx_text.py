@@ -3,7 +3,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: Rx Text
-# Generated: Fri Feb 28 18:40:39 2020
+# Generated: Thu Jun 11 15:30:28 2020
 ##################################################
 
 from distutils.version import StrictVersion
@@ -69,7 +69,7 @@ class rx_text(gr.top_block, Qt.QWidget):
         ##################################################
         # Variables
         ##################################################
-        self.samp_rate = samp_rate = 2.4e6
+        self.samp_rate = samp_rate = 1e6
         self.gain = gain = 60
         self.freq = freq = 100e6
 
@@ -83,7 +83,7 @@ class rx_text(gr.top_block, Qt.QWidget):
         self.rtlsdr_source_0.set_dc_offset_mode(0, 0)
         self.rtlsdr_source_0.set_iq_balance_mode(0, 0)
         self.rtlsdr_source_0.set_gain_mode(False, 0)
-        self.rtlsdr_source_0.set_gain(10, 0)
+        self.rtlsdr_source_0.set_gain(30, 0)
         self.rtlsdr_source_0.set_if_gain(20, 0)
         self.rtlsdr_source_0.set_bb_gain(20, 0)
         self.rtlsdr_source_0.set_antenna('', 0)
