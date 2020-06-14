@@ -3,11 +3,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: Tx Text
-<<<<<<< HEAD
-# Generated: Thu Jun 11 15:24:30 2020
-=======
-# Generated: Fri Feb 28 19:39:42 2020
->>>>>>> 49f6a03dd40c53dbe7750d8b1f286adff2ca9425
+# Generated: Sun Jun 14 19:04:16 2020
 ##################################################
 
 from distutils.version import StrictVersion
