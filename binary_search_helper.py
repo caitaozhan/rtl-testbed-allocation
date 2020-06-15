@@ -3,6 +3,7 @@
 
 import argparse
 import time
+import sys
 from subprocess import Popen, PIPE
 from test_interfere import TestInterfere
 
@@ -19,16 +20,25 @@ if __name__ == '__main__':
     rx_time = args.time[0]
     filename = args.file[0]
     command = ['python', 'rx_text.py']
-    p = Popen(command)
+    p = Popen(command, stdout=PIPE, stderr=PIPE)
     try:
         for i in range(rx_time):
-            print i
+            print i,
+            sys.stdout.flush()
             time.sleep(1)
+        print ''
         p.kill()
     except:
         p.kill()  # if exception occured, make sure the rtlsdr subprocess will be killed
 
+    stderr = p.stderr.readlines()
+    stderr = ' '.join(stderr)
+    rx_disconnect = False
+    if stderr.find('UHD Error') != -1:
+        rx_disconnect = True
+
     # step 2: check whether there is interference
     testinter = TestInterfere(filename)
-    interfere = testinter.test_interfere(rx_time - 6)
-    print(interfere)
+    interfere = testinter.test_interfere(rx_time - 6, 98, 1000)
+    print '\nRX disconnect = ', rx_disconnect
+    print 'interfere = ', interfere

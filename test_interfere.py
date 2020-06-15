@@ -24,8 +24,8 @@ class TestInterfere:
         fail    = 0
 
         for key, count in sorted(result.items(), key=lambda x: x[1], reverse=True):
-            print(key, count)
             if count > 50:
+                print(key, count)
                 success += count
                 success_counter += 1
             else:
@@ -48,25 +48,28 @@ class TestInterfere:
 
         return result
 
-    def test_interfere(self, success_count_threshold):
+    def test_interfere(self, success_count_threshold, success_rate_threshold, success_average_threshold):
         '''If there is interfere, then return True. If no interfere, then return False
         '''
-        print(success_count_threshold)
+        
+        print('success count   threshold', success_count_threshold)
+        print('success rate    threshold', success_rate_threshold)
+        print('success average threshold', success_average_threshold)
         result = self.analyzefile()
         for key, val in result.items():
             print(key, val)
         a = result['success_counter'] > success_count_threshold - 2
-        b = result['success_average'] > 1000
-        c = result['success_rate'] > 98
+        b = result['success_rate'] > success_rate_threshold
+        c = result['success_average'] > success_average_threshold
         if a and b and c:
             return False
         else:
             return True
-        
+
 
 def test():
     testinter = TestInterfere('file_receive')
-    testinter.test_interfere(10)
+    testinter.test_interfere(10, 99, 1000)
 
 
 if __name__ == '__main__':

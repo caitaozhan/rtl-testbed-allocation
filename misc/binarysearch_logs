@@ -1,0 +1,154 @@
+########## TX off, RX on ##########
+
+**********stdout**********
+
+['linux; GNU C++ version 7.3.0; Boost_106501; UHD_003.010.003.000-0-unknown\n', '\n']
+
+**********stderr**********
+
+['gr-osmosdr 0.1.5 (0.1.5) gnuradio 3.7.11\n', 
+'built-in source types: file fcd rtl rtl_tcp uhd hackrf rfspace redpitaya \n', 
+'Cannot connect to server socket err = No such file or directory\n', 
+'Cannot connect to server request channel\n', 'jack server is not running or cannot be started\n', 
+'JackShmReadWritePtr::~JackShmReadWritePtr - Init not done for -1, skipping unlock\n', 
+'JackShmReadWritePtr::~JackShmReadWritePtr - Init not done for -1, skipping unlock\n', 
+'Found Rafael Micro R820T tuner\n', 'Using device #0 Realtek RTL2838UHIDIR SN: 00000001\n', 
+'Found Rafael Micro R820T tuner\n', '[R82XX] PLL not locked!\n', 
+'Exact sample rate is: 1000000.026491 Hz\n', '[R82XX] PLL not locked!\n']
+
+4
+integer division or modulo by zero
+('fail_total', 0)
+('success_counter', 0)
+('success_rate', 0)
+('success_average', 0)
+('success_total', 0)
+True
+
+
+
+
+########## TX on,  RX on ##########
+
+**********stdout**********
+
+['linux; GNU C++ version 7.3.0; Boost_106501; UHD_003.010.003.000-0-unknown\n', '\n', 'Warning: the blks2.packet_decoder block is deprecated.\n']
+
+**********stderr**********
+
+['gr-osmosdr 0.1.5 (0.1.5) gnuradio 3.7.11\n', 
+'built-in source types: file fcd rtl rtl_tcp uhd hackrf rfspace redpitaya \n', 
+'Cannot connect to server socket err = No such file or directory\n', 
+'Cannot connect to server request channel\n', 'jack server is not running or cannot be started\n', 
+'JackShmReadWritePtr::~JackShmReadWritePtr - Init not done for -1, skipping unlock\n', 
+'JackShmReadWritePtr::~JackShmReadWritePtr - Init not done for -1, skipping unlock\n', 
+'Found Rafael Micro R820T tuner\n', 'Using device #0 Realtek RTL2838UHIDIR SN: 00000001\n', 
+'Found Rafael Micro R820T tuner\n', '[R82XX] PLL not locked!\n', 
+'Exact sample rate is: 1000000.026491 Hz\n', '[R82XX] PLL not locked!\n', 'O']
+
+4
+('2020-6-15 0:7:54', 4442)
+('2020-6-15 0:7:55', 3635)
+('2020-6-15 0:7:53', 3332)
+('2020-6-15 0:7:56', 1501)
+('2020-6-15 0:7:52', 211)
+('Hello, TX1! 2020-TX1! 2020-6-15 0:7:55', 2)
+('Hello, TX1! 2020-6-1! 2020-6-15 0:7:55', 2)
+('Hello, TX1! 2020-6X1! 2020-6-15 0:7:55', 1)
+('2020-6-15 :7:53', 1)
+('Hello, TX1! llo, TX1! 2020-6-15 0:7:54', 1)
+('Hello, TX1! 2020-6-15 0:7:-6-15 0:7:55', 1)
+('Hello, TX1! 2020-6-15 0:7:-6-15 0:7:56', 1)
+('Hello, TX1! 2020-6-1! 2020-6-15 0:7:53', 1)
+('H5 0:7:53', 1)
+('Hello, TX1! ! 2020-6-15 0:7:54', 1)
+('Hellox7:53', 1)
+('Hello, TX1! 2020-6-15 0020-6-15 0:7:55', 1)
+('15 0:7:55', 1)
+('15 0:7:54', 1)
+('Hello, TX1! 202', 1)
+('Hello, TX', 1)
+('Hello, TX1! 255', 1)
+('Hello, TX1! 2x4', 1)
+('Hello, xo, TX1! 2020-6-15 0:7:54', 1)
+('Hello, TX1! 20o, TX1! 2020-6-15 0:7:55', 1)
+('Hello, TX1! 2020-6-15 0:7:56-15 0:7:56', 1)
+('He 0:7:54', 1)
+('Hello, TX1! 2020-6-15 0:7Hello, TX1! 2020-6-15 0:7:55', 1)
+('Hello,:56', 1)
+('Hello, TX1! 202, TX1! 2020-6-15 0:7:54', 1)
+('! 2020-6-15 0:7:52', 1)
+('He-6-15 0:7:54', 1)
+('2020-6-1x20-6-15 0:7:53', 1)
+('Hello, TX1! 2020-6-15 lo, TX1! 2020-6-15 0:7:56', 1)
+('Hello, TX1! 2020-6-15 0:7:50-6-15 0:7:55', 1)
+('fail_total', 32)
+('success_counter', 5)
+('success_rate', 99.75670949593248)
+('success_average', 2624)
+('success_total', 13121)
+False
+
+
+
+########## RX off ##########
+0 1 2 3 4 5 6 7 8 9 
+**********stdout**********
+
+['linux; GNU C++ version 7.3.0; Boost_106501; UHD_003.010.003.000-0-unknown\n', '\n', 'Warning: the blks2.packet_decoder block is deprecated.\n', '-- Using format CF32.\n']
+
+**********stderr**********
+
+['gr-osmosdr 0.1.5 (0.1.5) gnuradio 3.7.11\n', 
+'built-in source types: file fcd rtl rtl_tcp uhd hackrf rfspace redpitaya \n', 
+'Cannot connect to server socket err = No such file or directory\n', 
+'Cannot connect to server request channel\n', 'jack server is not running or cannot be started\n', 
+'JackShmReadWritePtr::~JackShmReadWritePtr - Init not done for -1, skipping unlock\n', 
+'JackShmReadWritePtr::~JackShmReadWritePtr - Init not done for -1, skipping unlock\n', 
+'\n', 'UHD Error:\n', '    Device discovery error: unknown key format: 0\n', '\n',
+'UHD Error:\n', '    Device discovery error: unknown key format: 0\n', '\n', 'UHD Error:\n', 
+'    Device discovery error: unknown key format: 0\n', 
+'Cannot connect to server socket err = No such file or directory\n', 
+'Cannot connect to server request channel\n', 'jack server is not running or cannot be started\n', 
+'JackShmReadWritePtr::~JackShmReadWritePtr - Init not done for -1, skipping unlock\n', 
+'JackShmReadWritePtr::~JackShmReadWritePtr - Init not done for -1, skipping unlock\n', 
+'Cannot connect to server socket err = No such file or directory\n', 
+'Cannot connect to server request channel\n', 'jack server is not running or cannot be started\n', 
+'JackShmReadWritePtr::~JackShmReadWritePtr - Init not done for -1, skipping unlock\n', 
+'JackShmReadWritePtr::~JackShmReadWritePtr - Init not done for -1, skipping unlock\n', 
+'Cannot connect to server socket err = No such file or directory\n', 
+'Cannot connect to server request channel\n', 'jack server is not running or cannot be started\n', 
+'JackShmReadWritePtr::~JackShmReadWritePtr - Init not done for -1, skipping unlock\n', 
+'JackShmReadWritePtr::~JackShmReadWritePtr - Init not done for -1, skipping unlock\n', 
+'Cannot connect to server socket err = No such file or directory\n', 
+'Cannot connect to server request channel\n', 'jack server is not running or cannot be started\n', 
+'JackShmReadWritePtr::~JackShmReadWritePtr - Init not done for -1, skipping unlock\n', 
+'JackShmReadWritePtr::~JackShmReadWritePtr - Init not done for -1, skipping unlock\n', 
+"-- Using subdev spec '0:0'.\n", '\n', 'UHD Warning:\n', 
+'    Setting DC offset compensation is not possible on this device.\n', '\n', 'UHD Warning:\n', 
+'    Setting DC offset is not possible on this device.\n', '\n', 'UHD Warning:\n', 
+'    Setting IQ balance is not possible on this device.\n', '\n', 
+'RtApiAlsa: dump hardware params just after device open:\n', '\n', 
+'ACCESS:  MMAP_INTERLEAVED RW_INTERLEAVED\n', 'FORMAT:  S16_LE S32_LE\n', 
+'SUBFORMAT:  STD\n', 'SAMPLE_BITS: [16 32]\n', 'FRAME_BITS: [32 64]\n', 
+'CHANNELS: 2\n', 'RATE: [44100 96000]\n', 'PERIOD_TIME: (166 185760)\n', 
+'PERIOD_SIZE: [16 8192]\n', 'PERIOD_BYTES: [128 65536]\n', 'PERIODS: [2 32]\n', 
+'BUFFER_TIME: (333 371520)\n', 'BUFFER_SIZE: [32 16384]\n', 'BUFFER_BYTES: [128 65536]\n', 
+'TICK_TIME: ALL\n', '\n', 'RtApiAlsa: dump hardware params after installation:\n', 
+'\n', 'ACCESS:  RW_INTERLEAVED\n', 'FORMAT:  S32_LE\n', 'SUBFORMAT:  STD\n', 
+'SAMPLE_BITS: 32\n', 'FRAME_BITS: 64\n', 'CHANNELS: 2\n', 'RATE: 96000\n', 
+'PERIOD_TIME: (21333 21334)\n', 'PERIOD_SIZE: 2048\n', 'PERIOD_BYTES: 16384\n', 
+'PERIODS: 4\n', 'BUFFER_TIME: (85333 85334)\n', 'BUFFER_SIZE: 8192\n', 
+'BUFFER_BYTES: 65536\n', 'TICK_TIME: 0\n', '\n', 
+'RtApiAlsa: dump software params after installation:\n', '\n', 'tstamp_mode: NONE\n', 
+'tstamp_type: MONOTONIC\n', 'period_step: 1\n', 'avail_min: 2048\n', 
+'start_threshold: 2048\n', 'stop_threshold: -1\n', 'silence_threshold: 0\n', 
+'silence_size: 4611686018427387904\n', 'boundary: 4611686018427387904\n']
+4
+integer division or modulo by zero
+('fail_total', 0)
+('success_counter', 0)
+('success_rate', 0)
+('success_average', 0)
+('success_total', 0)
+True

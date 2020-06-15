@@ -3,7 +3,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: Rx Text
-# Generated: Sun Jun 14 14:44:45 2020
+# Generated: Sun Jun 14 23:23:17 2020
 ##################################################
 
 from distutils.version import StrictVersion
