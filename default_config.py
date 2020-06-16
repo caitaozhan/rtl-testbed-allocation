@@ -43,6 +43,9 @@ class DEFAULT:
     loc_per_hypothesis    = 4    # for averaging
     wait_between_loc      = 2
 
+    # PU/PUR
+    pu_ip_host_file       = 'address/pu_ip_host'
+
 
 class MAP:
     name       = ''
