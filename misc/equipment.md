@@ -15,3 +15,6 @@
 |battery|5||
 |Micro SD adapter|2||
 |cart|1||
+
+
+rtl 101 is broken
