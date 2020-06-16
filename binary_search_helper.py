@@ -19,7 +19,7 @@ if __name__ == '__main__':
     # step 1: do some sensing
     rx_time = args.time[0]
     filename = args.file[0]
-    command = ['python', 'rx_text.py']
+    command = ['python', 'rx_text_ssh.py']
     p = Popen(command, stdout=PIPE, stderr=PIPE)
     try:
         for i in range(rx_time):
@@ -33,12 +33,13 @@ if __name__ == '__main__':
 
     stderr = p.stderr.readlines()
     stderr = ' '.join(stderr)
+    print(stderr)
     rx_disconnect = False
     if stderr.find('UHD Error') != -1:
         rx_disconnect = True
 
     # step 2: check whether there is interference
     testinter = TestInterfere(filename)
-    interfere = testinter.test_interfere(rx_time - 6, 98, 1000)
+    interfere = testinter.test_interfere(rx_time - 6, 98, 500)
     print '\nRX disconnect = ', rx_disconnect
     print 'interfere = ', interfere
