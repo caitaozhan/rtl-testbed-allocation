@@ -4,6 +4,7 @@
 import argparse
 import time
 import sys
+import os
 from subprocess import Popen, PIPE
 from test_interfere import TestInterfere
 
@@ -15,6 +16,11 @@ if __name__ == '__main__':
     parser.add_argument('-t', '--time', type=int, nargs=1, default=[10], help='time for rx to sense text')
     parser.add_argument('-f', '--file', type=str, nargs=1, default=['file_receive'], help='the filename that where the receiver store received text')
     args = parser.parse_args()
+
+    # step 0: let the file_transmit.py running
+    hostname = os.uname()[1]  # T3
+    command = ['python', 'file_transmit.py', '-n', hostname[1:]]
+    p_file_transmit = Popen(command, stdout=PIPE)
 
     # step 1: do some sensing
     rx_time = args.time[0]
@@ -33,7 +39,7 @@ if __name__ == '__main__':
 
     stderr = p.stderr.readlines()
     stderr = ' '.join(stderr)
-    print(stderr)
+    # print(stderr)
     rx_disconnect = False
     if stderr.find('UHD Error') != -1:
         rx_disconnect = True
@@ -41,5 +47,9 @@ if __name__ == '__main__':
     # step 2: check whether there is interference
     testinter = TestInterfere(filename)
     interfere = testinter.test_interfere(rx_time - 6, 98, 500)
+    print 'hostname = ', hostname
     print '\nRX disconnect = ', rx_disconnect
     print 'interfere = ', interfere
+
+    p_file_transmit.kill()
+    
