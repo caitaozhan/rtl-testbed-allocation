@@ -17,4 +17,4 @@ if __name__ == '__main__':
         message = 'Hello, TX{}! {}-{}-{} {}:{}:{:d}\n'.format(tx_name, lt.tm_year, lt.tm_mon, lt.tm_mday, lt.tm_hour, lt.tm_min, lt.tm_sec)
         with open('file_transmit', 'w') as f:
             f.write(message)
-            print(message)
+            print message,

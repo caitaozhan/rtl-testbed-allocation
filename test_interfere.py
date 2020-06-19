@@ -52,9 +52,9 @@ class TestInterfere:
         '''If there is interfere, then return True. If no interfere, then return False
         '''
         
-        print('success count   threshold', success_count_threshold)
-        print('success rate    threshold', success_rate_threshold)
-        print('success average threshold', success_average_threshold)
+        # print('success count   threshold', success_count_threshold)
+        # print('success rate    threshold', success_rate_threshold)
+        # print('success average threshold', success_average_threshold)
         result = self.analyzefile()
         for key, val in result.items():
             print(key, val)

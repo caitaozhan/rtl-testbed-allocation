@@ -4,6 +4,7 @@ Utlities
 
 import os
 import math
+from subprocess import Popen, PIPE
 from mpu import haversine_distance
 
 
@@ -63,3 +64,24 @@ class Utility:
         '''
         if os.path.exists(directory) is False:
             os.mkdir(directory)
+
+
+    @staticmethod
+    def program_is_running(program):
+        '''if tx_text.py is running the command will return a list of three elements
+            ['caitao   23206 14243 99 20:26 pts/0    00:00:14 /usr/bin/python -u /home/caitao/Project/rtl-testbed-allocation/tx_text.py\n', 
+            'caitao   23283 23280  0 20:26 pts/4    00:00:00 /bin/sh -c ps -ef | grep tx_text.py\n', 
+            'caitao   23285 23283  0 20:26 pts/4    00:00:00 grep tx_text.py\n']
+        '''
+        command = 'ps -ef | grep {}'.format(program)
+        p = Popen(command, shell=True, stdout=PIPE)
+        p.wait()
+        stdout = p.stdout.readlines()
+        if len(stdout) >= 3:
+            return True
+        else:
+            return False
+
+
+if __name__ == '__main__':
+    print(Utility.program_is_running('tx_text.py'))

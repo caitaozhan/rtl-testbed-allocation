@@ -4,8 +4,10 @@
 import argparse
 import time
 import sys
+import os
 from subprocess import Popen, PIPE
 from test_interfere import TestInterfere
+from utility import Utility 
 
 if __name__ == '__main__':
 
@@ -16,30 +18,48 @@ if __name__ == '__main__':
     parser.add_argument('-f', '--file', type=str, nargs=1, default=['file_receive'], help='the filename that where the receiver store received text')
     args = parser.parse_args()
 
-    # step 1: do some sensing
-    rx_time = args.time[0]
-    filename = args.file[0]
-    command = ['python', 'rx_text_ssh.py']
-    p = Popen(command, stdout=PIPE, stderr=PIPE)
-    try:
-        for i in range(rx_time):
-            print i,
-            sys.stdout.flush()
-            time.sleep(1)
-        print ''
-        p.kill()
-    except:
-        p.kill()  # if exception occured, make sure the rtlsdr subprocess will be killed
+    hostname = os.uname()[1]  # T3
 
-    stderr = p.stderr.readlines()
-    stderr = ' '.join(stderr)
-    print(stderr)
-    rx_disconnect = False
-    if stderr.find('UHD Error') != -1:
-        rx_disconnect = True
+    # step 0: check whether the transmitter is on
+    if Utility.program_is_running('tx_text.py') is False:
+        print 'PU TX on = ', False
+        print 'hostname = ', hostname
+        print '\nRX disconnect = ', None
+        print 'interfere = ', None
+    else:
+        # step 0: let the file_transmit.py running
+        command = ['python', 'file_transmit.py', '-n', hostname[1:]]
+        p_file_transmit = Popen(command, stdout=PIPE)
 
-    # step 2: check whether there is interference
-    testinter = TestInterfere(filename)
-    interfere = testinter.test_interfere(rx_time - 6, 98, 500)
-    print '\nRX disconnect = ', rx_disconnect
-    print 'interfere = ', interfere
+        # step 1: do some sensing
+        rx_time = args.time[0]
+        filename = args.file[0]
+        command = ['python', 'rx_text_ssh.py']
+        p = Popen(command, stdout=PIPE, stderr=PIPE)
+        try:
+            for i in range(rx_time):
+                print i,
+                sys.stdout.flush()
+                time.sleep(1)
+            print ''
+            p.kill()
+        except:
+            p.kill()  # if exception occured, make sure the rtlsdr subprocess will be killed
+
+        stderr = p.stderr.readlines()
+        stderr = ' '.join(stderr)
+        # print(stderr)
+        rx_disconnect = False
+        if stderr.find('UHD Error') != -1:
+            rx_disconnect = True
+
+        # step 2: check whether there is interference
+        testinter = TestInterfere(filename)
+        interfere = testinter.test_interfere(rx_time - 6, 97, 500)
+        print 'PU TX on = ', True
+        print 'hostname = ', hostname
+        print '\nRX disconnect = ', rx_disconnect
+        print 'interfere = ', interfere
+
+        p_file_transmit.kill()
+    
