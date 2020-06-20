@@ -8,8 +8,8 @@ from default_config import DEFAULT
 class BinarySearch:
     '''
     '''
-    def __init__(self):
-        pass
+    def __init__(self, debug=False):
+        self.debug = debug
 
     def read_pu(self):
         '''read the info of PU/PUR, the {IP address: hostname}
@@ -33,7 +33,8 @@ class BinarySearch:
            b'interfere =  False\n']
         '''
         pu_tx_on, hostname, disconnect, interfere = '', '', '', ''
-        print(stdout)
+        if self.debug:
+            print(stdout)
         for line in stdout:
             line = str(line)
             if line.find('PU TX on') != -1:
@@ -106,7 +107,7 @@ class BinarySearch:
 
 
 def test():
-    binarySearch = BinarySearch()
+    binarySearch = BinarySearch(debug=False)
     print('optimal gain is', binarySearch.search(0, 47))
 
 
