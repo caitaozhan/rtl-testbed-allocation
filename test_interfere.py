@@ -8,7 +8,7 @@ class TestInterfere:
 
     def __init__(self, rx_file):
         self.rx_file = rx_file
-    
+
     def analyzefile(self):
         result = Counter()
         with open(self.rx_file, 'r') as f:
@@ -18,7 +18,7 @@ class TestInterfere:
                     result[' '.join(line[2:])] += 1
                 else:
                     result[' '.join(line)] += 1
-        
+
         success = 0
         success_counter = 0
         fail    = 0

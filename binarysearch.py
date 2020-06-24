@@ -1,4 +1,4 @@
-'''Binary search server.py to find the optimal gain
+'''Binary search at the {SU side} to find the optimal gain for SU
 '''
 
 import time

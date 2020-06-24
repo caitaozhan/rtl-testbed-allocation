@@ -1,4 +1,4 @@
-'''The server doing binary search will call this program
+'''The binary search helper is ran on the {PU/PUR side}
 '''
 
 import argparse
