@@ -7,7 +7,7 @@ class DEFAULT:
     '''
     # Receiver (Sensor) side
     rx_sample_rate  = 2.4e6
-    rx_center_freq  = 100e6
+    rx_center_freq  = 915.8e6
     rx_gain         = 0
     rx_num_samples  = 512*128
     rx_NFFT         = 256
@@ -17,7 +17,7 @@ class DEFAULT:
     rx_sleep        = 0                               # sleep time between two iterations
 
     # Transmitter side
-    tx_freq         = 100e6
+    tx_freq         = 915.8e6
     tx_gain         = 53
     tx_train_log    = 'tx_train_log'     # log for training
     tx_test_log     = 'tx_test_log'      # log for realtime localization testing
@@ -40,7 +40,7 @@ class DEFAULT:
     ser_rx_train_data_dir = 'rx_data'
 
     # others
-    loc_per_hypothesis    = 4    # for averaging
+    loc_per_hypothesis    = 1    # for averaging
     wait_between_loc      = 2
 
     # PU/PUR

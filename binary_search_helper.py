@@ -16,15 +16,17 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='this is the program that the binary search program will call ' + hint)
     parser.add_argument('-t', '--time', type=int, nargs=1, default=[10], help='time for rx to sense text')
     parser.add_argument('-f', '--file', type=str, nargs=1, default=['file_receive'], help='the filename that where the receiver store received text')
+    parser.add_argument('-de', '--debug', action='store_true', help='print stderr')
     args = parser.parse_args()
 
     hostname = os.uname()[1]  # T3
+    debug = args.debug
 
     # step 0: check whether the transmitter is on
     if Utility.program_is_running('tx_text.py') is False:
-        print 'PU TX on = ', False
         print 'hostname = ', hostname
-        print '\nRX disconnect = ', None
+        print 'PU TX on = ', False
+        print 'RX disconnect = ', None
         print 'interfere = ', None
     else:
         # step 0: let the file_transmit.py running
@@ -48,7 +50,9 @@ if __name__ == '__main__':
 
         stderr = p.stderr.readlines()
         stderr = ' '.join(stderr)
-        # print(stderr)
+        if debug:
+            print(stderr)
+
         rx_disconnect = False
         if stderr.find('UHD Error') != -1:
             rx_disconnect = True
@@ -56,8 +60,8 @@ if __name__ == '__main__':
         # step 2: check whether there is interference
         testinter = TestInterfere(filename)
         interfere = testinter.test_interfere(rx_time - 6, 97, 500)
-        print 'PU TX on = ', True
         print 'hostname = ', hostname
+        print 'PU TX on = ', True
         print '\nRX disconnect = ', rx_disconnect
         print 'interfere = ', interfere
 

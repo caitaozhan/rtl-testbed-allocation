@@ -3,6 +3,7 @@ Utlities
 '''
 
 import os
+import platform
 import math
 from subprocess import Popen, PIPE
 from mpu import haversine_distance
@@ -82,6 +83,20 @@ class Utility:
         else:
             return False
 
+    @staticmethod
+    def get_command(describe):
+        if describe == 'speech':
+            if platform.system() == 'Darwin':
+                return 'say'
+            elif platform.system() == 'Linux':
+                return 'spd-say'
+        if describe == 'pssh':
+            if platform.system() == 'Darwin':
+                return 'pssh'
+            elif platform.system() == 'Linux':
+                return 'parallel-ssh'
+        raise Exception('No command returning')
+            
 
 if __name__ == '__main__':
     print(Utility.program_is_running('tx_text.py'))

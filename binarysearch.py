@@ -56,7 +56,7 @@ class BinarySearch:
         '''This is essentially finding the lower bound
         '''
         pu = self.read_pu()
-        ssh = "ssh {}@{} 'cd Project/rtl-testbed-allocation && python binary_search_helper.py -t 10'"
+        ssh = "ssh {}@{} 'cd Project/rtl-testbed-allocation && python binary_search_helper.py -t 10 {}'"
         su  = "hackrf_transfer -f {}  -x {}  -a 1 -c 60".format(DEFAULT.tx_freq, '{}')
         ps = []
 
@@ -69,7 +69,10 @@ class BinarySearch:
 
             # step 2: start the PU/PUR and get all the stdout
             for key, val in pu.items():
-                command = ssh.format(val, key)
+                if self.debug:
+                    command = ssh.format(val, key, '-de')
+                else:
+                    command = ssh.format(val, key, '-')
                 p = Popen(command, shell=True, stdout=PIPE)
                 ps.append((p, command))
             pu_tx_on = []
@@ -107,7 +110,7 @@ class BinarySearch:
 
 
 def test():
-    binarySearch = BinarySearch(debug=False)
+    binarySearch = BinarySearch(debug=True)
     print('optimal gain is', binarySearch.search(0, 47))
 
 

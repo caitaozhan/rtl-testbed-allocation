@@ -6,6 +6,7 @@ import os
 import argparse
 from default_config import DEFAULT
 from subprocess import Popen, PIPE
+from utility import Utility
 
 
 class CollectTx:
@@ -14,17 +15,18 @@ class CollectTx:
     def get_tx_log(usernames, mode='train', num_log=1):
         '''Get the transmission log (ground truth) from Tx listed in the address list
         '''
+        ssh_command = Utility.get_command('pssh')
         ps = []
         for username in usernames:
             ip_file = DEFAULT.ser_tx_ip_file + '.{}'.format(username)
             if os.stat(ip_file).st_size == 0:      # empty file
                 continue
             if mode == 'train':
-                pssh = "parallel-ssh -t 5 -h {} -o {} -l {} -i \"cd Project/rtl-testbed && cat {}\""        # cat: the entire log
-                command = pssh.format(ip_file, DEFAULT.ser_tx_log_dir, username, DEFAULT.tx_train_log)
+                pssh = "{} -t 5 -h {} -o {} -l {} -i \"cd Project/rtl-testbed && cat {}\""        # cat: the entire log
+                command = pssh.format(ssh_command, ip_file, DEFAULT.ser_tx_log_dir, username, DEFAULT.tx_train_log)
             elif mode == 'test':
-                pssh = "parallel-ssh -h {} -o {} -l {} -i \"cd Project/rtl-testbed && tail -{} {}\""    # tail: the latest log
-                command = pssh.format(ip_file, DEFAULT.ser_tx_log_dir, username, num_log, DEFAULT.tx_test_log)
+                pssh = "{} -h {} -o {} -l {} -i \"cd Project/rtl-testbed && tail -{} {}\""    # tail: the latest log
+                command = pssh.format(ssh_command, ip_file, DEFAULT.ser_tx_log_dir, username, num_log, DEFAULT.tx_test_log)
             else:
                 raise Exception('mode = {} invalid'.format(mode))
             print(command)
