@@ -42,14 +42,14 @@ class rx_text(gr.top_block):
         ##################################################
         self.samp_rate = samp_rate = 1e6
         self.gain = gain = 60
-        self.freq = freq = 100e6
+        self.freq = freq = 915.8e6
 
         ##################################################
         # Blocks
         ##################################################
         self.rtlsdr_source_0 = osmosdr.source( args="numchan=" + str(1) + " " + '' )
         self.rtlsdr_source_0.set_sample_rate(samp_rate)
-        self.rtlsdr_source_0.set_center_freq(100e6, 0)
+        self.rtlsdr_source_0.set_center_freq(915.8e6, 0)
         self.rtlsdr_source_0.set_freq_corr(0, 0)
         self.rtlsdr_source_0.set_dc_offset_mode(0, 0)
         self.rtlsdr_source_0.set_iq_balance_mode(0, 0)
