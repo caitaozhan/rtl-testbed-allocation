@@ -45,6 +45,8 @@ class DEFAULT:
 
     # PU/PUR
     pu_ip_host_file       = 'address/pu_ip_host'
+    success_rate          = 90
+    success_average       = 250
 
 
 class MAP:

@@ -7,7 +7,9 @@ import sys
 import os
 from subprocess import Popen, PIPE
 from test_interfere import TestInterfere
-from utility import Utility 
+from utility import Utility
+from default_config import DEFAULT
+
 
 if __name__ == '__main__':
 
@@ -59,7 +61,7 @@ if __name__ == '__main__':
 
         # step 2: check whether there is interference
         testinter = TestInterfere(filename)
-        interfere = testinter.test_interfere(rx_time - 6, 97, 500)
+        interfere = testinter.test_interfere(rx_time - 6, DEFAULT.success_rate, DEFAULT.success_rate)
         print 'hostname = ', hostname
         print 'PU TX on = ', True
         print '\nRX disconnect = ', rx_disconnect

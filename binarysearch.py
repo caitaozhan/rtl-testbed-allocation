@@ -51,6 +51,8 @@ class BinarySearch:
                 interfere = interfere.replace("\\n'", '')
         return {'hostname':hostname, 'pu_tx_on':pu_tx_on, 'disconnect':disconnect, 'interfere':interfere}
 
+    def print_extract(self, extract):
+        print 'hostname:{}  '.format(extract['hostname']),  'interfere:{}  '.format(extract['interfere']), 'RX disconnect:{}  '.format(extract['disconnect']), 'PU TX on:{}  '.format(extract['pu_tx_on'])
 
     def search(self, low, high):
         '''This is essentially finding the lower bound
@@ -63,7 +65,7 @@ class BinarySearch:
         while low < high:
             # step 1: start the SU transmitter
             mid = (low + high + 1) // 2    # + 1 is the key for finding the lower bound
-            print('--> left={}, mid={}, high={}'.format(low, mid, high))
+            print('\n--> left={}, mid={}, high={}'.format(low, mid, high))
             command = su.format(mid)
             p_su = Popen(command, shell=True, stdout=PIPE, stderr=PIPE)
 
@@ -72,7 +74,7 @@ class BinarySearch:
                 if self.debug:
                     command = ssh.format(val, key, '-de')
                 else:
-                    command = ssh.format(val, key, '-')
+                    command = ssh.format(val, key, '-de')
                 p = Popen(command, shell=True, stdout=PIPE)
                 ps.append((p, command))
             pu_tx_on = []
@@ -83,12 +85,13 @@ class BinarySearch:
                 for p, command in ps:
                     if p.poll() is not None:  # terminated
                         stdout = p.stdout.readlines()
-                        print(command)
+                        if self.debug:
+                            print(command)
                         extract = self.extract_stdout(stdout)
                         pu_tx_on.append(extract['pu_tx_on'])
                         pur_disconnect.append(extract['disconnect'])
                         interfere.append(extract['interfere'])
-                        print(extract, '\n')
+                        self.print_extract(extract)
                     else:
                         new_ps.append((p, command))      # still running
                 ps = new_ps
@@ -97,10 +100,10 @@ class BinarySearch:
 
             # step 3: get the PU/PUR interfere results and update low or high
             if 'False' in pu_tx_on:
-                print('exist PU TX off')
+                print('exit PU TX off')
                 return -1
             elif 'True' in pur_disconnect:
-                print('exist PUR disconnected')
+                print('exit PUR disconnected')
                 return -1
             elif 'True' in interfere:
                 high = mid - 1
@@ -110,7 +113,7 @@ class BinarySearch:
 
 
 def test():
-    binarySearch = BinarySearch(debug=True)
+    binarySearch = BinarySearch(debug=False)
     print('optimal gain is', binarySearch.search(0, 47))
 
 
