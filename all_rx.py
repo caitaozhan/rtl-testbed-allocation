@@ -3,11 +3,13 @@ Tell all the receivers/sensors to do something
 '''
 
 import os
+import platform
 import argparse
 import time
 import glob
 from subprocess import Popen, PIPE
 from default_config import DEFAULT
+from utility import Utility
 
 
 class AllRx:
@@ -16,17 +18,18 @@ class AllRx:
     @staticmethod
     def sense(sample_iter, sleep, timestamp=False):
         '''Tell all the receivers to sense some RSS samples'''
+        ssh_command = Utility.get_command('pssh')
         if timestamp is False:
-            pssh = 'parallel-ssh -h {} -l odroid -t 0 -i \"cd rtl-testbed && python rx-sense.py -si {} -sl {}\"'
-            command = pssh.format(DEFAULT.ser_rx_ip_file, sample_iter, sleep)
+            pssh = '{} -h {} -l odroid -t 0 -i \"cd rtl-testbed && python rx-sense.py -si {} -sl {}\"'
+            command = pssh.format(ssh_command, DEFAULT.ser_rx_ip_file, sample_iter, sleep)
             print(command, '\n')
             p = Popen(command, shell=True)
             p.wait()
         else: # for the outdoor case, at the local time of odroids, the time is not synchronized
             lt = time.localtime()
             timestamp = '{}-{}-{}-{}-{}-{}'.format(lt.tm_year, lt.tm_mon, lt.tm_mday, lt.tm_hour, lt.tm_min, lt.tm_sec)
-            pssh = 'parallel-ssh -h {} -l odroid -t 0 -i \"cd rtl-testbed && python rx-sense.py -si {} -sl {} -ts {}\"'
-            command = pssh.format(DEFAULT.ser_rx_ip_file, sample_iter, sleep, timestamp)
+            pssh = '{} -h {} -l odroid -t 0 -i \"cd rtl-testbed && python rx-sense.py -si {} -sl {} -ts {}\"'
+            command = pssh.format(ssh_command, DEFAULT.ser_rx_ip_file, sample_iter, sleep, timestamp)
             print(command, '\n')
             p = Popen(command, shell=True)
             p.wait()

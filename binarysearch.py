@@ -1,4 +1,4 @@
-'''Binary search server.py to find the optimal gain
+'''Binary search at the {SU side} to find the optimal gain for SU
 '''
 
 import time
@@ -8,8 +8,8 @@ from default_config import DEFAULT
 class BinarySearch:
     '''
     '''
-    def __init__(self):
-        pass
+    def __init__(self, debug=False):
+        self.debug = debug
 
     def read_pu(self):
         '''read the info of PU/PUR, the {IP address: hostname}
@@ -33,7 +33,8 @@ class BinarySearch:
            b'interfere =  False\n']
         '''
         pu_tx_on, hostname, disconnect, interfere = '', '', '', ''
-        print(stdout)
+        if self.debug:
+            print(stdout)
         for line in stdout:
             line = str(line)
             if line.find('PU TX on') != -1:
@@ -55,7 +56,7 @@ class BinarySearch:
         '''This is essentially finding the lower bound
         '''
         pu = self.read_pu()
-        ssh = "ssh {}@{} 'cd Project/rtl-testbed-allocation && python binary_search_helper.py -t 10'"
+        ssh = "ssh {}@{} 'cd Project/rtl-testbed-allocation && python binary_search_helper.py -t 10 {}'"
         su  = "hackrf_transfer -f {}  -x {}  -a 1 -c 60".format(DEFAULT.tx_freq, '{}')
         ps = []
 
@@ -68,7 +69,10 @@ class BinarySearch:
 
             # step 2: start the PU/PUR and get all the stdout
             for key, val in pu.items():
-                command = ssh.format(val, key)
+                if self.debug:
+                    command = ssh.format(val, key, '-de')
+                else:
+                    command = ssh.format(val, key, '-')
                 p = Popen(command, shell=True, stdout=PIPE)
                 ps.append((p, command))
             pu_tx_on = []
@@ -106,7 +110,7 @@ class BinarySearch:
 
 
 def test():
-    binarySearch = BinarySearch()
+    binarySearch = BinarySearch(debug=True)
     print('optimal gain is', binarySearch.search(0, 47))
 
 

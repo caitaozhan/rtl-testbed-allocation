@@ -4,9 +4,11 @@ Collect data from sensors
 
 from subprocess import Popen, PIPE
 import os
+import platform
 import time
 import argparse
 from default_config import DEFAULT
+from utility import Utility
 
 
 class CollectRx:
@@ -74,10 +76,11 @@ class CollectRx:
         Args:
             num_samples (int): number of samples
         '''
-        pssh = "parallel-ssh -h {} -o {} -l odroid -i \"tail -{} {}\""
-        command = pssh.format(DEFAULT.ser_rx_ip_file, DEFAULT.ser_rx_data_dir, num_samples, DEFAULT.rx_rss_file)
+        ssh_command = Utility.get_command('pssh')
+        pssh = "{} -h {} -o {} -l odroid -i \"tail -{} {}\""
+        command = pssh.format(ssh_command, DEFAULT.ser_rx_ip_file, DEFAULT.ser_rx_data_dir, num_samples, DEFAULT.rx_rss_file)
         print(command)
-        p = Popen(command, shell=True)
+        p = Popen(command, shell=True, stderr=PIPE)
         p.wait()
 
 
