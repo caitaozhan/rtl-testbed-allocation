@@ -12,6 +12,21 @@ from utility import Utility
 from binarysearch import BinarySearch
 
 
+class RecordTrainingSample:
+    '''One line of a sample: 
+        1. PU1loc, PU1power, ..., PUnloc, PUnpower, SU location, SU optimal power
+        2. SS1 power, ..., SSn power, SU location, SU optimal power  
+    '''
+    def __init__(self):
+        pass
+
+    def record_type1(self, opt_gain):
+        pass
+
+    def record_type2(self, opt_gain):
+        pass
+
+
 if __name__ == "__main__":
 
     # python training_allo.py
@@ -37,8 +52,10 @@ if __name__ == "__main__":
         for i in range(1, average+1):
             speech = '{} \"{} starts\"'.format(command, i)
             os.system(speech)
-            # print('optimal gain is', binarySearch.search(0, 47))
+            opt_gain = binarySearch.search(0, 47)
+            print('optimal gain is', opt_gain)
             AllRx.sense(sample_iteration, sleep, timestamp)
+
             speech = '{} \"{} ends\"'.format(command, i)
             os.system(speech)
             time.sleep(1)
