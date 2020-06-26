@@ -47,7 +47,7 @@ class DEFAULT:
     pu_ip_host_file       = 'address/pu_ip_host'
     success_rate          = 90
     success_average       = 200
-
+    pu_info_file          = 'pu_info/pu'
 
 class MAP:
     name       = ''

@@ -105,7 +105,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>100e6</value>
+      <value>915.8e6</value>
     </param>
   </block>
   <block>
@@ -132,7 +132,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>60</value>
+      <value>55</value>
     </param>
   </block>
   <block>
@@ -379,7 +379,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>fftsize</key>
