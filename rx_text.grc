@@ -105,7 +105,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>100e6</value>
+      <value>915.8e6</value>
     </param>
   </block>
   <block>
@@ -1877,7 +1877,7 @@
     </param>
     <param>
       <key>freq0</key>
-      <value>100e6</value>
+      <value>freq</value>
     </param>
     <param>
       <key>gain_mode0</key>

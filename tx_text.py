@@ -3,7 +3,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: Tx Text
-# Generated: Thu Jun 18 22:54:49 2020
+# Generated: Fri Jun 26 17:23:10 2020
 ##################################################
 
 from distutils.version import StrictVersion
@@ -18,16 +18,19 @@ if __name__ == '__main__':
         except:
             print "Warning: failed to XInitThreads()"
 
+from PyQt5 import Qt
 from PyQt5 import Qt, QtCore
 from gnuradio import blocks
 from gnuradio import digital
 from gnuradio import eng_notation
 from gnuradio import gr
+from gnuradio import qtgui
 from gnuradio import uhd
 from gnuradio.eng_option import eng_option
 from gnuradio.filter import firdes
 from grc_gnuradio import blks2 as grc_blks2
 from optparse import OptionParser
+import sip
 import sys
 import time
 from gnuradio import qtgui
@@ -67,8 +70,8 @@ class tx_text(gr.top_block, Qt.QWidget):
         # Variables
         ##################################################
         self.samp_rate = samp_rate = 1e6
-        self.gain = gain = 60
-        self.freq = freq = 100e6
+        self.gain = gain = 55
+        self.freq = freq = 915.8e6
 
         ##################################################
         # Blocks
@@ -84,6 +87,25 @@ class tx_text(gr.top_block, Qt.QWidget):
         self.uhd_usrp_sink_0.set_center_freq(freq, 0)
         self.uhd_usrp_sink_0.set_gain(gain, 0)
         self.uhd_usrp_sink_0.set_antenna('TX/RX', 0)
+        self.qtgui_sink_x_1_0 = qtgui.sink_c(
+        	1024, #fftsize
+        	firdes.WIN_BLACKMAN_hARRIS, #wintype
+        	freq, #fc
+        	samp_rate, #bw
+        	"Receiver", #name
+        	True, #plotfreq
+        	True, #plotwaterfall
+        	False, #plottime
+        	True, #plotconst
+        )
+        self.qtgui_sink_x_1_0.set_update_time(1.0/10)
+        self._qtgui_sink_x_1_0_win = sip.wrapinstance(self.qtgui_sink_x_1_0.pyqwidget(), Qt.QWidget)
+        self.top_layout.addWidget(self._qtgui_sink_x_1_0_win)
+
+        self.qtgui_sink_x_1_0.enable_rf_freq(True)
+
+
+
         self.digital_qam_mod_0 = digital.qam.qam_mod(
           constellation_points=4,
           mod_code="gray",
@@ -109,6 +131,7 @@ class tx_text(gr.top_block, Qt.QWidget):
         ##################################################
         self.connect((self.blks2_packet_encoder_0, 0), (self.digital_qam_mod_0, 0))
         self.connect((self.blocks_file_source_0, 0), (self.blks2_packet_encoder_0, 0))
+        self.connect((self.digital_qam_mod_0, 0), (self.qtgui_sink_x_1_0, 0))
         self.connect((self.digital_qam_mod_0, 0), (self.uhd_usrp_sink_0, 0))
 
     def closeEvent(self, event):
@@ -122,6 +145,7 @@ class tx_text(gr.top_block, Qt.QWidget):
     def set_samp_rate(self, samp_rate):
         self.samp_rate = samp_rate
         self.uhd_usrp_sink_0.set_samp_rate(self.samp_rate)
+        self.qtgui_sink_x_1_0.set_frequency_range(self.freq, self.samp_rate)
 
     def get_gain(self):
         return self.gain
@@ -137,6 +161,7 @@ class tx_text(gr.top_block, Qt.QWidget):
     def set_freq(self, freq):
         self.freq = freq
         self.uhd_usrp_sink_0.set_center_freq(self.freq, 0)
+        self.qtgui_sink_x_1_0.set_frequency_range(self.freq, self.samp_rate)
 
 
 def main(top_block_cls=tx_text, options=None):
