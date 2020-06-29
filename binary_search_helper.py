@@ -24,8 +24,8 @@ if __name__ == '__main__':
     hostname = os.uname()[1]  # T3
     debug = args.debug
 
-    # step 0: check whether the transmitter is on
-    if Utility.program_is_running('tx_text.py') is False:
+    # step 0: check whether the PU transmitter is on
+    if Utility.program_is_running('tx_text.py') is False and Utility.program_is_running('tx-text.py') is False:
         print 'hostname = ', hostname
         print 'PU TX on = ', False
         print 'RX disconnect = ', None
