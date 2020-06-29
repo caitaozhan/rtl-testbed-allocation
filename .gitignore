@@ -34,3 +34,5 @@ rx_data/10.16
 results/10.13*
 file_receive
 file_receive.yes
+training/su_pu
+training/su_ss

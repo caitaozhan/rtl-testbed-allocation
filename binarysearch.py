@@ -65,7 +65,7 @@ class BinarySearch:
         while low < high:
             # step 1: start the SU transmitter
             mid = (low + high + 1) // 2    # + 1 is the key for finding the lower bound
-            print('\n--> left={}, mid={}, high={}'.format(low, mid, high))
+            print('\n--> low={}, mid={}, high={}'.format(low, mid, high))
             command = su.format(mid)
             p_su = Popen(command, shell=True, stdout=PIPE, stderr=PIPE)
 
@@ -74,7 +74,7 @@ class BinarySearch:
                 if self.debug:
                     command = ssh.format(val, key, '-de')
                 else:
-                    command = ssh.format(val, key, '-de')
+                    command = ssh.format(val, key, '-de')  # BUG?
                 p = Popen(command, shell=True, stdout=PIPE)
                 ps.append((p, command))
             pu_tx_on = []

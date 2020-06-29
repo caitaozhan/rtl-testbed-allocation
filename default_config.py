@@ -48,6 +48,9 @@ class DEFAULT:
     success_rate          = 90
     success_average       = 200
     pu_info_file          = 'pu_info/pu'
+    su_type1_data         = 'training/su_pu'  # with SU info and PU data
+    su_type2_data         = 'training/su_ss'  # with SU info and SS data
+
 
 class MAP:
     name       = ''

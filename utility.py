@@ -96,6 +96,20 @@ class Utility:
             elif platform.system() == 'Linux':
                 return 'parallel-ssh'
         raise Exception('No command returning')
+
+    @staticmethod
+    def test_lwan(private_net):
+        '''test if the ip of this pc is in private_net
+        '''
+        command = "ifconfig | grep 'inet '"
+        p = Popen(command, shell=True, stdout=PIPE)
+        p.wait()
+        stdout = p.stdout.readlines()
+        for line in stdout:
+            if line.find(private_net) != -1:
+                return True
+        return False
+        
             
 
 if __name__ == '__main__':
