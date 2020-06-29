@@ -61,7 +61,7 @@ if __name__ == '__main__':
 
         # step 2: check whether there is interference
         testinter = TestInterfere(filename)
-        interfere = testinter.test_interfere(rx_time - 6, DEFAULT.success_rate, DEFAULT.success_rate)
+        interfere = testinter.test_interfere(rx_time - 6, DEFAULT.success_rate, DEFAULT.success_average)
         print 'hostname = ', hostname
         print 'PU TX on = ', True
         print '\nRX disconnect = ', rx_disconnect

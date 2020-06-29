@@ -4,9 +4,12 @@ Collect Tx transmission log
 
 import os
 import argparse
+import time
+import json
 from default_config import DEFAULT
 from subprocess import Popen, PIPE
 from utility import Utility
+from default_config import DEFAULT
 
 
 class CollectTx:
@@ -89,10 +92,32 @@ class CollectTx:
             ip_host_file.close()
 
     @staticmethod
-    def get_tx_truth_location():
-        '''get the ground truth location of Tx
+    def get_pu_info():
+        '''get the information of PU, including location and transmitting power
         '''
-        pass
+        pu = {}
+        with open(DEFAULT.pu_ip_host_file, 'r') as f:
+            for line in f:
+                line = line.split(':')
+                pu[line[0]] = line[1].strip()
+        ssh = "ssh {}@{} 'cd Project/rtl-testbed-allocation && cat {}'"
+        ps = []
+        for ip, hostname in pu.items():
+            command = ssh.format(hostname, ip, DEFAULT.pu_info_file)
+            p = Popen(command, shell=True, stdout=PIPE)
+            ps.append((p, command))
+        pu_info = []
+        while ps:
+            new_ps = []
+            for p, command in ps:
+                if p.poll() is not None:  # terminated
+                    stdout = p.stdout.readlines()
+                    pu_info.append(json.loads(stdout[0]))
+                else:
+                    new_ps.append((p, command))
+            ps = new_ps
+            time.sleep(0.1)
+        return pu_info
 
 
 if __name__ == '__main__':

@@ -80,7 +80,7 @@ class CollectRx:
         pssh = "{} -h {} -o {} -l odroid -i \"tail -{} {}\""
         command = pssh.format(ssh_command, DEFAULT.ser_rx_ip_file, DEFAULT.ser_rx_data_dir, num_samples, DEFAULT.rx_rss_file)
         print(command)
-        p = Popen(command, shell=True, stderr=PIPE)
+        p = Popen(command, shell=True, stdout=PIPE, stderr=PIPE)
         p.wait()
 
 
