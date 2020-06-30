@@ -34,7 +34,7 @@ import argparse
 import json
 import os
 from default_config import DEFAULT
-
+from utility import Utility
 
 class tx_text(gr.top_block):
 
@@ -134,6 +134,10 @@ if __name__ == '__main__':
     freq = args.freq[0]
     x = args.x_coord[0]
     y = args.y_coord[0]
+
+    Utility.guarantee_dir(DEFAULT.pu_info_dir)
+    with open(DEFAULT.file_transmit, 'w') as f:
+        f.write('hello world')
 
     with open(DEFAULT.pu_info_file, 'w') as f:
         hostname = os.uname()[1]
