@@ -8,6 +8,8 @@ import time
 import argparse
 import glob
 import numpy as np
+import threading
+import Queue
 from collections import defaultdict
 from default_config import DEFAULT
 from all_rx import AllRx
@@ -75,6 +77,21 @@ class RecordTrainingSample:
             f.write('{:.1f}, {:.1f}, {}\n'.format(float(su_loc[0]), float(su_loc[1]), opt_gain))
 
 
+queue_pu  = Queue.Queue()
+
+def ss_sense_pu_info_record():
+    # step 2: do the SS sensing, collect the sensing data, record it
+    start = time.time()
+    AllRx.sense(sample_iteration, sleep, timestamp)
+    CollectRx.get_rss_data(sample_iteration)
+    print('SS sensing time = {}'.format(time.time() - start))
+    
+    # step 3: collect PU info, record it
+    start = time.time()
+    pu_info = CollectTx.get_pu_info()
+    queue_pu.put(pu_info)
+    print('get PU info time = {}'.format(time.time() - start))
+
 
 if __name__ == "__main__":
 
@@ -110,20 +127,17 @@ if __name__ == "__main__":
             x = raw_input('SU X coordinate = ')
             y = raw_input('SU Y coordinate = ')
 
+            # put previous step 2 & 3 here, run concurrently with step 1
+            t = threading.Thread(target=ss_sense_pu_info_record)
+            t.start()
+
             # step 1: do binary search
             start = time.time()
             opt_gain = binarySearch.search(0, 47)
             print('optimal gain is', opt_gain, 'time = {:2}'.format(time.time() - start))
 
-            # step 2: do the SS sensing, collect the sensing data, record it
-            start = time.time()
-            AllRx.sense(sample_iteration, sleep, timestamp)
-            CollectRx.get_rss_data(sample_iteration)
-            print('SS sensing time = {}'.format(time.time() - start))
-            record.record_type2(opt_gain, su_loc=(x, y))
+            t.join()
 
-            # step 3: collect PU info, record it
-            start = time.time()
-            pu_info = CollectTx.get_pu_info()
-            print('get PU info time = {}'.format(time.time() - start))
+            pu_info = queue_pu.get()
             record.record_type1(pu_info, opt_gain, su_loc=(x, y))
+            record.record_type2(opt_gain, su_loc=(x, y))

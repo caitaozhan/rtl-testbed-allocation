@@ -23,8 +23,11 @@ class AllRx:
             pssh = '{} -h {} -l odroid -t 0 -i \"cd rtl-testbed && python rx-sense.py -si {} -sl {}\"'
             command = pssh.format(ssh_command, DEFAULT.ser_rx_ip_file, sample_iter, sleep)
             print(command, '\n')
-            p = Popen(command, shell=True)
+            p = Popen(command, shell=True, stdout=PIPE)
             p.wait()
+            stdout = p.stdout.readlines()
+            for i in range(0, len(stdout), 3):
+                print stdout[i],
         else: # for the outdoor case, at the local time of odroids, the time is not synchronized
             lt = time.localtime()
             timestamp = '{}-{}-{}-{}-{}-{}'.format(lt.tm_year, lt.tm_mon, lt.tm_mday, lt.tm_hour, lt.tm_min, lt.tm_sec)
