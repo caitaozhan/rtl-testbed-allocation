@@ -90,20 +90,22 @@ if __name__ == "__main__":
 
     sample_iteration = args.sample_iteration[0]
     sleep   = args.sleep[0]
-    average = args.average[0]
+    average = args.average[0]  # not using this variable
     wait    = args.wait[0]
     timestamp = args.timestamp
 
     command = Utility.get_command('speech')
     binarySearch = BinarySearch(debug=False)
     record = RecordTrainingSample(DEFAULT.su_type1_data, DEFAULT.su_type2_data)
-    while True:
-        raw_input('Press to start a hypothesis')
-        if Utility.test_lwan('192.168.30.') is False:
-            print('Not connected to 192.168.30. private net')
-            break
-        for i in range(1, average+1):
-            speech = '{} \"{} starts\"'.format(command, i)
+    for _ in range(2):
+        speech = '{} \"Move the primary users to new location\"'.format(command)
+        os.system(speech)
+        for _ in range(2):
+            if Utility.test_lwan('192.168.30.') is False:
+                print('Not connected to 192.168.30. private net')
+                break
+            raw_input('Press to start a new binary search')
+            speech = '{} \"Change the primary users power\"'.format(command)
             os.system(speech)
             x = raw_input('SU X coordinate = ')
             y = raw_input('SU Y coordinate = ')
@@ -125,16 +127,3 @@ if __name__ == "__main__":
             pu_info = CollectTx.get_pu_info()
             print('get PU info time = {}'.format(time.time() - start))
             record.record_type1(pu_info, opt_gain, su_loc=(x, y))
-
-            speech = '{} \"{} ends\"'.format(command, i)
-            os.system(speech)
-            time.sleep(1)
-            if i == average:
-                os.system('{} \"Press to start new\"'.format(command))
-                time.sleep(2)
-            else:   # move the cart
-                for j in range(wait, 0, -1):
-                    speech = '{} {}'.format(command, j)
-                    os.system(speech)
-                    time.sleep(1)
-
