@@ -47,10 +47,11 @@ class DEFAULT:
     pu_ip_host_file       = 'address/pu_ip_host'
     success_rate          = 90
     success_average       = 200
+    pu_info_dir           = 'pu_info'
     pu_info_file          = 'pu_info/pu'
     su_type1_data         = 'training/su_pu'  # with SU info and PU data
     su_type2_data         = 'training/su_ss'  # with SU info and SS data
-
+    file_transmit         = 'file_transmit'
 
 class MAP:
     name       = ''
