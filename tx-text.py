@@ -136,7 +136,8 @@ if __name__ == '__main__':
     y = args.y_coord[0]
 
     Utility.guarantee_dir(DEFAULT.pu_info_dir)
-    os.system('touch {}'.format(DEFAULT.file_transmit))
+    with open(DEFAULT.file_transmit, 'w') as f:
+        f.write('hello world')
 
     with open(DEFAULT.pu_info_file, 'w') as f:
         hostname = os.uname()[1]
