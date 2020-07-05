@@ -99,10 +99,10 @@ class BinarySearch:
             p_su.kill()
 
             # step 3: get the PU/PUR interfere results and update low or high
-            if 'False' in pu_tx_on:
-                print('exit PU TX off')
-                return -1
-            elif 'True' in pur_disconnect:
+            # if 'False' in pu_tx_on:
+            #     print('exit PU TX off')
+            #     return -1
+            if 'True' in pur_disconnect:
                 print('exit PUR disconnected')
                 return -1
             elif 'True' in interfere:

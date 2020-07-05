@@ -141,7 +141,8 @@ if __name__ == '__main__':
 
     with open(DEFAULT.pu_info_file, 'w') as f:
         hostname = os.uname()[1]
-        pu_info = {'hostname':hostname, 'gain':gain, 'freq':freq, 'x':x, 'y':y}
+        tx_on = Utility.program_is_running('tx-text.py')
+        pu_info = {'hostname':hostname, 'gain':gain, 'freq':freq, 'x':x, 'y':y, 'tx_on':tx_on}
         json.dump(pu_info, f)
 
     main(gain, freq)

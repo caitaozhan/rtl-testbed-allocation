@@ -30,6 +30,7 @@ class RecordTrainingSample:
         self.ip_2_hostname = {}
         self.init_ip_2_hostname()
 
+
     def init_ip_2_hostname(self):
         with open(DEFAULT.ser_rx_ip_host_file, 'r') as f:
             for line in f:
@@ -43,10 +44,18 @@ class RecordTrainingSample:
             opt_gain -- int
             su_loc   -- tuple<int, int>
         '''
+        pu_dict = {}
+        for pu in pu_info:
+            pu_dict[pu['hostname']] = pu
+        pu_list = ['T1', 'T2', 'T3', 'T4']
         with open(self.type1_file, 'a') as f:
-            for pu in pu_info:  # order of T1, T2, ... ?
-                f.write('{}, {}, {}, '.format(pu['x'], pu['y'], pu['gain']))
+            for pu in pu_list:
+                if pu in pu_dict and pu_dict[pu]['tx_on'] is True:
+                    f.write('{}, {}, {}, '.format(pu_dict[pu]['x'], pu_dict[pu]['y'], pu_dict[pu]['gain']))
+                else:
+                    f.write('nan, nan, nan, ')
             f.write('{:.1f}, {:.1f}, {}\n'.format(float(su_loc[0]), float(su_loc[1]), su_opt_gain))
+
 
     def record_type2(self, opt_gain, su_loc):
         ''' SS data and SU data
@@ -79,18 +88,21 @@ class RecordTrainingSample:
 
 queue_pu  = Queue.Queue()
 
-def ss_sense_pu_info_record():
+def ss_sense_record():
     # step 2: do the SS sensing, collect the sensing data, record it
     start = time.time()
     AllRx.sense(sample_iteration, sleep, timestamp)
     CollectRx.get_rss_data(sample_iteration)
     print('SS sensing time = {}'.format(time.time() - start))
     
+
+def pu_info_record():
     # step 3: collect PU info, record it
     start = time.time()
     pu_info = CollectTx.get_pu_info()
     queue_pu.put(pu_info)
     print('get PU info time = {}'.format(time.time() - start))
+
 
 
 if __name__ == "__main__":
@@ -128,16 +140,19 @@ if __name__ == "__main__":
             y = raw_input('SU Y coordinate = ')
 
             # put previous step 2 & 3 here, run concurrently with step 1
-            t = threading.Thread(target=ss_sense_pu_info_record)
-            t.start()
+            # t_ss = threading.Thread(target=ss_senserecord)
+            # t_ss.start()
+            t_pu = threading.Thread(target=pu_info_record)
+            t_pu.start()
 
             # step 1: do binary search
             start = time.time()
             opt_gain = binarySearch.search(0, 47)
             print('optimal gain is', opt_gain, 'time = {:2}'.format(time.time() - start))
 
-            t.join()
+            # t_ss.join()
+            t_pu.join()
 
             pu_info = queue_pu.get()
             record.record_type1(pu_info, opt_gain, su_loc=(x, y))
-            record.record_type2(opt_gain, su_loc=(x, y))
+            # record.record_type2(opt_gain, su_loc=(x, y))

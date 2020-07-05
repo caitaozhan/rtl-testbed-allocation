@@ -79,6 +79,13 @@ class OutdoorMap(MAP):
     y_axis_len = 10
     cell_len   = 3.2   # in meters
 
+class HimanMap(MAP):
+    name       = 'Himan'
+    origin     = (40.861589, -73.291066)
+    x_axis_len = 10
+    y_axis_len = 10
+    cell_len   = 2.4
+
 class SplatMap(MAP):
     name       = 'Splat'
     origin     = (0, 0)
