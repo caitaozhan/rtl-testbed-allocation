@@ -128,21 +128,27 @@ if __name__ == '__main__':
     parser.add_argument('-f', '--freq', type = int, nargs = 1, default = [DEFAULT.tx_freq], help = 'the frequency of the PU TX')
     parser.add_argument('-x', '--x_coord', type = float, nargs = 1, default = [-1], help = 'the x coordinate of the transmitter')
     parser.add_argument('-y', '--y_coord', type = float, nargs = 1, default = [-1], help = 'the y coordinate of the transmitter')
-
+    parser.add_argument('-o', '--off', action='store_true', help='this argument means turn the TX off (TX not running)')
+    
     args = parser.parse_args()
     gain = args.gain[0]
     freq = args.freq[0]
     x = args.x_coord[0]
     y = args.y_coord[0]
+    off = args.off
 
     Utility.guarantee_dir(DEFAULT.pu_info_dir)
     with open(DEFAULT.file_transmit, 'w') as f:
         f.write('hello world')
 
-    with open(DEFAULT.pu_info_file, 'w') as f:
-        hostname = os.uname()[1]
-        tx_on = Utility.program_is_running('tx-text.py')
-        pu_info = {'hostname':hostname, 'gain':gain, 'freq':freq, 'x':x, 'y':y, 'tx_on':tx_on}
-        json.dump(pu_info, f)
-
-    main(gain, freq)
+    if off:
+        with open(DEFAULT.pu_info_file, 'w') as f:
+            hostname = os.uname()[1]
+            pu_info = {'hostname':hostname, 'gain':gain, 'freq':freq, 'x':x, 'y':y, 'tx_on':'False'}
+            json.dump(pu_info, f)
+    else:
+        with open(DEFAULT.pu_info_file, 'w') as f:
+            hostname = os.uname()[1]
+            pu_info = {'hostname':hostname, 'gain':gain, 'freq':freq, 'x':x, 'y':y, 'tx_on':'True'}
+            json.dump(pu_info, f)
+        main(gain, freq)
