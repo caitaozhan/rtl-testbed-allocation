@@ -50,7 +50,7 @@ class RecordTrainingSample:
         pu_list = ['T1', 'T2', 'T3', 'T4']
         with open(self.type1_file, 'a') as f:
             for pu in pu_list:
-                if pu in pu_dict and pu_dict[pu]['tx_on'] is True:
+                if pu in pu_dict and pu_dict[pu]['tx_on'] == 'True':
                     f.write('{}, {}, {}, '.format(pu_dict[pu]['x'], pu_dict[pu]['y'], pu_dict[pu]['gain']))
                 else:
                     f.write('nan, nan, nan, ')
