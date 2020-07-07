@@ -8,7 +8,13 @@ from default_config import DEFAULT
 class BinarySearch:
     '''
     '''
-    def __init__(self, debug=False):
+    def __init__(self, tx='hackrf', debug=False):
+        '''
+        Args:
+            tx    -- str  -- either usrp or hackrf
+            debug -- bool -- debug option
+        '''
+        self.tx = tx
         self.debug = debug
 
     def read_pu(self):
@@ -59,7 +65,12 @@ class BinarySearch:
         '''
         pu = self.read_pu()
         ssh = "ssh {}@{} 'cd Project/rtl-testbed-allocation && python binary_search_helper.py -t 10 {}'"
-        su  = "hackrf_transfer -f {}  -x {}  -a 1 -c 60".format(DEFAULT.tx_freq, '{}')
+        if self.tx == 'hackrf':
+            su  = "hackrf_transfer -f {}  -x {}  -a 1 -c 60".format(DEFAULT.tx_freq, '{}')
+        elif self.tx == 'usrp':
+            su  = 'sudo python tx-run.py -g {}'
+        else:
+            raise Exception('value error of TX type')
         ps = []
 
         while low < high:
@@ -67,8 +78,12 @@ class BinarySearch:
             mid = (low + high + 1) // 2    # + 1 is the key for finding the lower bound
             print('\n--> low={}, mid={}, high={}'.format(low, mid, high))
             command = su.format(mid)
-            p_su = Popen(command, shell=True, stdout=PIPE, stderr=PIPE)
-
+            if self.tx == 'hackrf':
+                p_su = Popen(command, shell=True, stdout=PIPE, stderr=PIPE)
+            if self.tx == 'usrp':
+                p_su = Popen(command.split(), stdout=PIPE, stderr=PIPE)
+                time.sleep(2)
+            
             # step 2: start the PU/PUR and get all the stdout
             for key, val in pu.items():
                 if self.debug:
@@ -96,7 +111,12 @@ class BinarySearch:
                         new_ps.append((p, command))      # still running
                 ps = new_ps
                 time.sleep(0.1)
-            p_su.kill()
+            if self.tx == 'hackrf':
+                p_su.kill()  # BUG to fix
+            if self.tx == 'usrp':
+                kill = ['sudo', 'kill', str(p_su.pid+1)]
+                # print(kill)
+                Popen(kill, stdout=PIPE).wait()
 
             # step 3: get the PU/PUR interfere results and update low or high
             # if 'False' in pu_tx_on:
@@ -112,10 +132,15 @@ class BinarySearch:
         return low
 
 
-def test():
-    binarySearch = BinarySearch(debug=False)
+def hackrf():
+    binarySearch = BinarySearch(tx='hackrf', debug=False)
     print('optimal gain is', binarySearch.search(0, 47))
+
+def usrp():
+    binarySearch = BinarySearch(tx='usrp', debug=False)
+    print('optiman gain is', binarySearch.search(0, 89))
 
 
 if __name__ == '__main__':
-    test()
+    # hackrf()
+    usrp()

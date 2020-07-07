@@ -115,6 +115,7 @@ if __name__ == "__main__":
     parser.add_argument('-avg', '--average', type=int, nargs=1, default=[DEFAULT.loc_per_hypothesis], help='averaging: how many locations per hypothesis')
     parser.add_argument('-wt',  '--wait', type=int, nargs=1, default=[DEFAULT.wait_between_loc], help='time for moving the cart')
     parser.add_argument('-ts', '--timestamp', action='store_true', help='whether need to send timestamp')
+    parser.add_argument('-su', '--su_type', type=str, nargs=1, default=['usrp'], help='SU being either hackrf or usrp')
     args = parser.parse_args()
 
     sample_iteration = args.sample_iteration[0]
@@ -122,9 +123,10 @@ if __name__ == "__main__":
     average = args.average[0]  # not using this variable
     wait    = args.wait[0]
     timestamp = args.timestamp
+    su_type = args.su_type[0]
 
     command = Utility.get_command('speech')
-    binarySearch = BinarySearch(debug=False)
+    binarySearch = BinarySearch(tx=su_type, debug=False)
     record = RecordTrainingSample(DEFAULT.su_type1_data, DEFAULT.su_type2_data)
     for _ in range(2):
         speech = '{} \"Move the primary users to new location\"'.format(command)
@@ -147,7 +149,10 @@ if __name__ == "__main__":
 
             # step 1: do binary search
             start = time.time()
-            opt_gain = binarySearch.search(0, 47)
+            if su_type == 'hackrf':
+                opt_gain = binarySearch.search(0, 47)
+            elif su_type == 'usrp':
+                opt_gain = binarySearch.search(0, 89)
             print('optimal gain is', opt_gain, 'time = {:2}'.format(time.time() - start))
 
             # t_ss.join()
