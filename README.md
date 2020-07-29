@@ -80,3 +80,20 @@ python 2
 [Ettus Research homepage](https://kb.ettus.com/Knowledge_Base)
 
 [A master thesis](http://oa.upm.es/21618/1/TESIS_MASTER_LEI_ZHANG.pdf)
+
+
+# increase the interfere bar, not lower
+# decrease the distance between PU and PUR, so I can lower the PU gain
+
+# the first colomn of the data is number of PU
+# automate the PU commands
+# the lenovo laptop is "weaker" than others
+
+# did hackrf T3 deteriate? need to re-calibrate all the TXs
+# the small cart, remove the middle level
+# test the sensor with two antenna, when TX is tx_text. Is it different than tx-run?
+# mac terminator-like stuff?
+# antenna being long better?
+
+# host-200 has issues, host 188 no wifi dongle?
+# the issue of PU affecting each other

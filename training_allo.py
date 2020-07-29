@@ -10,6 +10,7 @@ import glob
 import numpy as np
 import threading
 import Queue
+import random
 from collections import defaultdict
 from default_config import DEFAULT
 from all_rx import AllRx
@@ -47,7 +48,7 @@ class RecordTrainingSample:
         pu_dict = {}
         for pu in pu_info:
             pu_dict[pu['hostname']] = pu
-        pu_list = ['T1', 'T2', 'T3', 'T4']
+        pu_list = ['T1', 'T2', 'T3']
         with open(self.type1_file, 'a') as f:
             for pu in pu_list:
                 if pu in pu_dict and pu_dict[pu]['tx_on'] == 'True':
@@ -115,7 +116,7 @@ if __name__ == "__main__":
     parser.add_argument('-avg', '--average', type=int, nargs=1, default=[DEFAULT.loc_per_hypothesis], help='averaging: how many locations per hypothesis')
     parser.add_argument('-wt',  '--wait', type=int, nargs=1, default=[DEFAULT.wait_between_loc], help='time for moving the cart')
     parser.add_argument('-ts', '--timestamp', action='store_true', help='whether need to send timestamp')
-    parser.add_argument('-su', '--su_type', type=str, nargs=1, default=['usrp'], help='SU being either hackrf or usrp')
+    parser.add_argument('-su', '--su_type', type=str, nargs=1, default=['hackrf'], help='SU being either hackrf or usrp')
     args = parser.parse_args()
 
     sample_iteration = args.sample_iteration[0]
@@ -128,36 +129,44 @@ if __name__ == "__main__":
     command = Utility.get_command('speech')
     binarySearch = BinarySearch(tx=su_type, debug=False)
     record = RecordTrainingSample(DEFAULT.su_type1_data, DEFAULT.su_type2_data)
-    for _ in range(2):
+    for i in range(9):
         speech = '{} \"Move the primary users to new location\"'.format(command)
         os.system(speech)
-        for _ in range(2):
+        raw_input('press')
+        for j in range(9):
+            speech = '{} \"i {} j {}\"'.format(command, i, j)
+            os.system(speech)
             if Utility.test_lwan('192.168.30.') is False:
                 print('Not connected to 192.168.30. private net')
                 break
-            raw_input('Press to start a new binary search')
             speech = '{} \"Change the primary users power\"'.format(command)
+            print([random.randint(55, 65)] + [random.randint(30, 65) for _ in range(2)])
             os.system(speech)
+            raw_input('press')
+
+            speech = '{} \"Change and Enter the S U location\"'.format(command)
+            os.system(speech)
+
             x = raw_input('SU X coordinate = ')
             y = raw_input('SU Y coordinate = ')
 
             # put previous step 2 & 3 here, run concurrently with step 1
-            # t_ss = threading.Thread(target=ss_senserecord)
-            # t_ss.start()
+            t_ss = threading.Thread(target=ss_sense_record)
+            t_ss.start()
             t_pu = threading.Thread(target=pu_info_record)
             t_pu.start()
 
             # step 1: do binary search
             start = time.time()
             if su_type == 'hackrf':
-                opt_gain = binarySearch.search(0, 47)
+                opt_gain = binarySearch.search(0, 46)
             elif su_type == 'usrp':
-                opt_gain = binarySearch.search(0, 89)
+                opt_gain = binarySearch.search(21, 70)
             print('optimal gain is', opt_gain, 'time = {:2}'.format(time.time() - start))
 
-            # t_ss.join()
+            t_ss.join()
             t_pu.join()
 
             pu_info = queue_pu.get()
             record.record_type1(pu_info, opt_gain, su_loc=(x, y))
-            # record.record_type2(opt_gain, su_loc=(x, y))
+            record.record_type2(opt_gain, su_loc=(x, y))
