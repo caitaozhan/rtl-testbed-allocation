@@ -48,7 +48,7 @@ class RecordTrainingSample:
         pu_dict = {}
         for pu in pu_info:
             pu_dict[pu['hostname']] = pu
-        pu_list = ['T1', 'T2', 'T3']
+        pu_list = ['T1', 'T2', 'T3', 'T4']
         with open(self.type1_file, 'a') as f:
             for pu in pu_list:
                 if pu in pu_dict and pu_dict[pu]['tx_on'] == 'True':
@@ -140,7 +140,7 @@ if __name__ == "__main__":
                 print('Not connected to 192.168.30. private net')
                 break
             speech = '{} \"Change the primary users power\"'.format(command)
-            print([random.randint(55, 65)] + [random.randint(30, 65) for _ in range(2)])
+            print([random.randint(55, 65)] + [random.randint(30, 60)] + [random.randint(50, 60)] + [random.randint(45, 60)])
             os.system(speech)
             raw_input('press')
 
@@ -150,21 +150,23 @@ if __name__ == "__main__":
             x = raw_input('SU X coordinate = ')
             y = raw_input('SU Y coordinate = ')
 
-            # put previous step 2 & 3 here, run concurrently with step 1
+            # first collect the sensor's sensing data, then do the binary search
             t_ss = threading.Thread(target=ss_sense_record)
             t_ss.start()
+            t_ss.join()
+
+            # collecting PU info and binary search happen conccurently
             t_pu = threading.Thread(target=pu_info_record)
             t_pu.start()
 
-            # step 1: do binary search
+            # do binary search to get the label (the optimal power)
             start = time.time()
             if su_type == 'hackrf':
-                opt_gain = binarySearch.search(0, 46)
+                opt_gain = binarySearch.search(0, 47)
             elif su_type == 'usrp':
                 opt_gain = binarySearch.search(21, 70)
             print('optimal gain is', opt_gain, 'time = {:2}'.format(time.time() - start))
 
-            t_ss.join()
             t_pu.join()
 
             pu_info = queue_pu.get()
