@@ -21,13 +21,14 @@ if __name__ == '__main__':
 
     # step 1: find the pid
     program = ' tx-text.py'
-    pid = Utility.find_pid(program)
+    pids = Utility.find_pid(program)
 
     # step 2: kill the previous program if pid is not -1
-    if pid != -1:
-        command = 'kill {}'.format(pid).split()
-        p = Popen(command)
-        print('{} killed'.format(pid))
+    if pids != -1:
+        for pid in pids:
+            command = 'kill {}'.format(pid).split()
+            p = Popen(command)
+            print('{} killed'.format(pid))
     
     # step 3: run the tx-text.py program with new arguments passed in
     command = 'python tx-text.py -x {} -y {} -g {}'.format(x, y, gain).split()

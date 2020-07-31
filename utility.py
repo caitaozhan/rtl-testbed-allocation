@@ -109,20 +109,23 @@ class Utility:
             if line.find(private_net) != -1:
                 return True
         return False
-        
+
     @staticmethod
     def find_pid(program):
         command = 'ps -ef | grep {}'.format(program)
         p = Popen(command, shell=True, stdout=PIPE)
         p.wait()
         stdout = p.stdout.readlines()
+        pids = []
         for line in stdout:
             if program in line and 'grep' not in line:
                 line = line.split()
                 pid = line[1]
-                return pid
-        return -1
-    
+                pids.append(pid)
+        if not pids:
+            return -1
+        else:
+            return pids
 
 
 if __name__ == '__main__':
