@@ -103,7 +103,6 @@ def ss_sense_record():
     CollectRx.get_rss_data(sample_iteration)
     print('SS sensing time = {}'.format(time.time() - start))
 
-
 def pu_info_record():
     # step 3: collect PU info, record it
     start = time.time()
@@ -113,19 +112,17 @@ def pu_info_record():
 
 def enter_pu_loc(pu_list):
     for pu in pu_list:
-        pu_x = raw_input('{} x = '.format(pu.name))
-        pu_y = raw_input('{} y = '.format(pu.name))
-        pu.x, pu.y = pu_x, pu_y
-        if pu.x == -1 or pu.y == -1:
-            pu.on = False
-        else:
-            pu.on = True
+        if pu.on:
+            pu_x = raw_input('{} x = '.format(pu.name))
+            pu_y = raw_input('{} y = '.format(pu.name))
+            pu.x, pu.y = pu_x, pu_y
     for pu in pu_list:
-        print '{}, '.format(pu.get_loc())
-
+        if pu.on:
+            print '{}, '.format(pu.get_loc())
+        else:
+            print '{}: off,'.format(pu.name)
     loc_correct = raw_input('\nIs location correct? y/n = ')
     return loc_correct
-
 
 def read_pu():
     '''read the info of PU/PUR
@@ -156,6 +153,15 @@ def restart_pu(pu_list):
     for p in ps:
         p.kill()   # killing the main process doesn't affect the subprocess it created (at the PU side)
 
+def update_on_off(pu_list):
+    num_on = random.randint(2, 4)
+    pu_on = sorted(random.sample([0, 1, 2, 3], num_on))
+    for i in [0, 1, 2, 3]:
+        if i in pu_on:
+            pu_list[i].on = True
+        else:
+            pu_list[i].on = False
+
 
 if __name__ == "__main__":
 
@@ -183,6 +189,8 @@ if __name__ == "__main__":
     pu_list = read_pu()
 
     while True:
+        update_on_off(pu_list)
+
         speech = '{} \"Change P U location?\"'.format(command)
         os.system(speech)
         change_pu_loc = raw_input('y/n = ')
@@ -198,8 +206,11 @@ if __name__ == "__main__":
         speech = '{} \"Change the P U power\"'.format(command)
         os.system(speech)
         for pu in pu_list:
-            pu.generate_gain()
-            print '{} '.format(pu.gain),
+            if pu.on:
+                pu.generate_gain()
+                print '{} '.format(pu.gain),
+            else:
+                print 'off ',
         print ''
         restart_pu(pu_list)
 
