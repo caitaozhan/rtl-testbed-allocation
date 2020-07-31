@@ -45,11 +45,7 @@ class DEFAULT:
 
     # PU/PUR
     pu_ip_host_file       = 'address/pu_ip_host'
-<<<<<<< HEAD
     success_rate          = 80
-=======
-    success_rate          = 85
->>>>>>> 23823256b5c4467837e813a4bea0703b11847567
     success_average       = 100
     pu_info_dir           = 'pu_info'
     pu_info_file          = 'pu_info/pu'
