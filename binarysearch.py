@@ -66,7 +66,7 @@ class BinarySearch:
         pu = self.read_pu()
         ssh = "ssh {}@{} 'cd Project/rtl-testbed-allocation && python binary_search_helper.py -t 10 {}'"
         if self.tx == 'hackrf':
-            su  = "hackrf_transfer -f {}  -x {}  -a 1 -c 60".format(DEFAULT.tx_freq, '{}')
+            su  = "hackrf_transfer -f {} -x {} -a 1 -c 60".format(DEFAULT.tx_freq, '{}')
         elif self.tx == 'usrp':
             su  = 'sudo python tx-run.py -g {}'
         else:

@@ -13,7 +13,7 @@ class DEFAULT:
     rx_NFFT         = 256
     rx_rss_file     = '/home/odroid/rtl-testbed/rss'  # location of the rss samples
     rx_rss_file_max = 100e6                           # the maximum file size is 100MB
-    rx_sample_iter  = 100                             # sample iterations
+    rx_sample_iter  = 20                              # sample iterations (changed from 100 to 20 to speed up the spectrum allocation testbed)
     rx_sleep        = 0                               # sleep time between two iterations
 
     # Transmitter side
@@ -45,7 +45,11 @@ class DEFAULT:
 
     # PU/PUR
     pu_ip_host_file       = 'address/pu_ip_host'
+<<<<<<< HEAD
     success_rate          = 80
+=======
+    success_rate          = 85
+>>>>>>> 23823256b5c4467837e813a4bea0703b11847567
     success_average       = 100
     pu_info_dir           = 'pu_info'
     pu_info_file          = 'pu_info/pu'
