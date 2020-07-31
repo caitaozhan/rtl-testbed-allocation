@@ -7,7 +7,7 @@ import time
 import numpy as np
 import psutil
 from subprocess import call, Popen, PIPE, check_call
-from default_config import DEFAULT, OutdoorMap
+from default_config import DEFAULT, OutdoorMap, HimanMap
 from utility import Utility
 
 class GPS:
@@ -129,7 +129,7 @@ if __name__ == '__main__':
             gps_decimal = gps.process_gps_raw()
 
             if gps_decimal is not None:   # Need to test, when there is no GPS signal
-                gps_coord = Utility.gps_2_coordinate(gps_decimal, OutdoorMap)
+                gps_coord = Utility.gps_2_coordinate(gps_decimal, HimanMap)
                 print '({:0.7f}, {:0.7f}), ({:0.7f}, {:0.7f})'.format(gps_decimal[0], gps_decimal[1], gps_coord[0], gps_coord[1])
                 gps.write_gps_to_file(gps_coord)
             else:

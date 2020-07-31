@@ -110,7 +110,22 @@ class Utility:
                 return True
         return False
         
-            
+    @staticmethod
+    def find_pid(program):
+        command = 'ps -ef | grep {}'.format(program)
+        p = Popen(command, shell=True, stdout=PIPE)
+        p.wait()
+        stdout = p.stdout.readlines()
+        for line in stdout:
+            if program in line and 'grep' not in line:
+                line = line.split()
+                pid = line[1]
+                return pid
+        return -1
+    
+
 
 if __name__ == '__main__':
-    print(Utility.program_is_running('tx_text.py'))
+    # print(Utility.program_is_running('tx_text.py'))
+    pid = Utility.find_pid('tx-text.py')
+    print(pid)
