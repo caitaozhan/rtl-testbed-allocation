@@ -143,7 +143,7 @@ def restart_pu(pu_list):
     ps = []
     for pu in pu_list:
         if pu.on is False:
-            ssh_command = "ssh {}@{} 'cd Project/rtl-testbed-allocation && python restart-tx-text.py -o'"
+            ssh_command = "ssh {}@{} 'cd Project/rtl-testbed-allocation && python restart-tx-text.py -o'".format(pu.hostname, pu.ip)
         else:
             ssh_command = "ssh {}@{} 'cd Project/rtl-testbed-allocation && python restart-tx-text.py -x {} -y {} -g {}'" \
                           .format(pu.hostname, pu.ip, pu.x, pu.y, pu.gain)
@@ -154,9 +154,9 @@ def restart_pu(pu_list):
         p.kill()   # killing the main process doesn't affect the subprocess it created (at the PU side)
 
 def update_on_off(pu_list):
-    num_on = random.randint(2, 4)
-    pu_on = sorted(random.sample([0, 1, 2, 3], num_on))
-    for i in [0, 1, 2, 3]:
+    num_on = random.randint(int(len(pu_list)/2), len(pu_list))
+    pu_on = sorted(random.sample(range(len(pu_list)), num_on))
+    for i in range(len(pu_list)):
         if i in pu_on:
             pu_list[i].on = True
         else:
