@@ -56,12 +56,13 @@ class RecordTrainingSample:
             for pu in pu_list:
                 if pu in pu_dict and pu_dict[pu]['tx_on'] == 'True':
                     counter += 1
-            f.write('{}, '.counter)
+            f.write('{}, '.format(counter))
             for pu in pu_list:
                 if pu in pu_dict and pu_dict[pu]['tx_on'] == 'True':
                     f.write('{}, {}, {}, '.format(pu_dict[pu]['x'], pu_dict[pu]['y'], pu_dict[pu]['gain']))
                 else:
-                    f.write('nan, nan, nan, ')
+                    pass
+                    # f.write('nan, nan, nan, ')
             f.write('{:.1f}, {:.1f}, {}\n'.format(float(su_loc[0]), float(su_loc[1]), su_opt_gain))
 
 
@@ -112,15 +113,9 @@ def pu_info_record():
 
 def enter_pu_loc(pu_list):
     for pu in pu_list:
-        if pu.on:
-            pu_x = raw_input('{} x = '.format(pu.name))
-            pu_y = raw_input('{} y = '.format(pu.name))
-            pu.x, pu.y = pu_x, pu_y
-    for pu in pu_list:
-        if pu.on:
-            print '{}, '.format(pu.get_loc())
-        else:
-            print '{}: off,'.format(pu.name)
+        pu_x = raw_input('{} x = '.format(pu.name))
+        pu_y = raw_input('{} y = '.format(pu.name))
+        pu.x, pu.y = pu_x, pu_y
     loc_correct = raw_input('\nIs location correct? y/n = ')
     return loc_correct
 
@@ -154,13 +149,17 @@ def restart_pu(pu_list):
         p.kill()   # killing the main process doesn't affect the subprocess it created (at the PU side)
 
 def update_on_off(pu_list):
+    print 'turning PU on/off ...'
     num_on = random.randint(int(len(pu_list)/2), len(pu_list))
     pu_on = sorted(random.sample(range(len(pu_list)), num_on))
     for i in range(len(pu_list)):
         if i in pu_on:
             pu_list[i].on = True
+            print '{}'.format(pu_list[i].get_loc())
         else:
             pu_list[i].on = False
+            print '{} off '.format(pu_list[i].name)
+    print '\n'
 
 
 if __name__ == "__main__":
@@ -189,8 +188,6 @@ if __name__ == "__main__":
     pu_list = read_pu()
 
     while True:
-        update_on_off(pu_list)
-
         speech = '{} \"Change P U location?\"'.format(command)
         os.system(speech)
         change_pu_loc = raw_input('y/n = ')
@@ -198,6 +195,8 @@ if __name__ == "__main__":
             correct = enter_pu_loc(pu_list)
             while correct == 'n':  # in case enter wrong location by mistake
                 correct = enter_pu_loc(pu_list)
+
+        update_on_off(pu_list)
 
         if Utility.test_lwan('192.168.30.') is False:
             print('Not connected to 192.168.30. private net')
@@ -219,7 +218,6 @@ if __name__ == "__main__":
         x = raw_input('SU X coordinate = ')
         y = raw_input('SU Y coordinate = ')
 
-        """
         # first collect the sensor's sensing data, then do the binary search
         t_ss = threading.Thread(target=ss_sense_record)
         t_ss.start()
@@ -242,4 +240,3 @@ if __name__ == "__main__":
         pu_info = queue_pu.get()
         record.record_type1(pu_info, opt_gain, su_loc=(x, y))
         record.record_type2(opt_gain, su_loc=(x, y))
-        """
