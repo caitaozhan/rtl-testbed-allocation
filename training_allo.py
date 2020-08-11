@@ -97,19 +97,23 @@ class RecordTrainingSample:
 
 queue_pu  = Queue.Queue()
 
-def ss_sense_record():
+def ss_sense():
     # step 2: do the SS sensing, collect the sensing data, record it
     start = time.time()
     AllRx.sense(sample_iteration, sleep, timestamp)
+    print('--> 1 SS sensing time = {}'.format(time.time() - start))
+
+def ss_collect():
+    start = time.time()
     CollectRx.get_rss_data(sample_iteration)
-    print('SS sensing time = {}'.format(time.time() - start))
+    print('--> 2.1 SS collect time = {}'.format(time.time() - start))
 
 def pu_info_record():
     # step 3: collect PU info, record it
     start = time.time()
     pu_info = CollectTx.get_pu_info()
     queue_pu.put(pu_info)
-    print('get PU info time = {}'.format(time.time() - start))
+    print('--> 2.2 get PU info time = {}'.format(time.time() - start))
 
 def enter_pu_loc(pu_list):
     for pu in pu_list:
@@ -188,6 +192,11 @@ if __name__ == "__main__":
     pu_list = read_pu()
 
     while True:
+
+        if Utility.test_lwan('192.168.30.') is False:
+            print 'Not connected to 192.168.30. private net'
+            break
+
         speech = '{} \"Change P U location?\"'.format(command)
         os.system(speech)
         change_pu_loc = raw_input('y/n = ')
@@ -196,47 +205,50 @@ if __name__ == "__main__":
             while correct == 'n':  # in case enter wrong location by mistake
                 correct = enter_pu_loc(pu_list)
 
-        update_on_off(pu_list)
-
-        if Utility.test_lwan('192.168.30.') is False:
-            print('Not connected to 192.168.30. private net')
-            break
-
-        speech = '{} \"Change the P U power\"'.format(command)
-        os.system(speech)
-        for pu in pu_list:
-            if pu.on:
-                pu.generate_gain()
-                print '{} '.format(pu.gain),
-            else:
-                print 'off ',
-        print ''
-        restart_pu(pu_list)
-
-        speech = '{} \"Change and Enter the S U location\"'.format(command)
+        speech = '{} \"Enter the S U location\"'.format(command)
         os.system(speech)
         x = raw_input('SU X coordinate = ')
         y = raw_input('SU Y coordinate = ')
 
-        # first collect the sensor's sensing data, then do the binary search
-        t_ss = threading.Thread(target=ss_sense_record)
-        t_ss.start()
-        t_ss.join()
+        for i in range(DEFAULT.su_same_loc_repeat):
+            speech = '{} \"repeat {}\"'.format(command, i)
+            os.system(speech)
 
-        # collecting PU info and binary search happen conccurently
-        t_pu = threading.Thread(target=pu_info_record)
-        t_pu.start()
+            update_on_off(pu_list)
 
-        # do binary search to get the label (the optimal power)
-        start = time.time()
-        if su_type == 'hackrf':
-            opt_gain = binarySearch.search(0, 47)
-        elif su_type == 'usrp':
-            opt_gain = binarySearch.search(21, 70)
-        print('optimal gain is', opt_gain, 'time = {:2}'.format(time.time() - start))
+            speech = '{} \"Change the P U power\"'.format(command)
+            os.system(speech)
+            for pu in pu_list:
+                if pu.on:
+                    pu.generate_gain()
+                    print '{} '.format(pu.gain),
+                else:
+                    print 'off ',
+            print ''
+            restart_pu(pu_list)
 
-        t_pu.join()
+            # first the sensors sense data
+            t_ss = threading.Thread(target=ss_sense)
+            t_ss.start()
+            t_ss.join()
 
-        pu_info = queue_pu.get()
-        record.record_type1(pu_info, opt_gain, su_loc=(x, y))
-        record.record_type2(opt_gain, su_loc=(x, y))
+            # collecting Sensing data and PU info, and binary search happen conccurently
+            t_ss = threading.Thread(target=ss_collect)
+            t_pu = threading.Thread(target=pu_info_record)
+            t_ss.start()
+            t_pu.start()
+
+            # do binary search to get the label (the optimal power)
+            start = time.time()
+            if su_type == 'hackrf':
+                opt_gain = binarySearch.search(0, 47)
+            elif su_type == 'usrp':
+                opt_gain = binarySearch.search(21, 70)
+            print '--> 2.3 optimal gain is', opt_gain, 'time = {:2}'.format(time.time() - start)
+
+            t_ss.join()
+            t_pu.join()
+
+            pu_info = queue_pu.get()
+            record.record_type1(pu_info, opt_gain, su_loc=(x, y))
+            record.record_type2(opt_gain, su_loc=(x, y))
