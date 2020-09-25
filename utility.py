@@ -2,13 +2,6 @@
 Utlities
 '''
 
-import os
-import platform
-import math
-from subprocess import Popen, PIPE
-from mpu import haversine_distance
-
-
 class Utility:
 
     @staticmethod
@@ -34,6 +27,7 @@ class Utility:
         Return:
             float
         '''
+        import math
         return math.sqrt((point2[0] - point1[0])**2 + (point2[1] - point1[1])**2)
 
     @staticmethod
@@ -44,6 +38,7 @@ class Utility:
         return:
             tuple<float, float> -- the (x, y) cooridinate
         '''
+        from mpu import haversine_distance
         a, b = gps
         lat_origin = outdoormap.origin[0]
         lon_origin = outdoormap.origin[1]
@@ -63,6 +58,7 @@ class Utility:
         Args:
             directory -- str
         '''
+        import os
         if os.path.exists(directory) is False:
             os.mkdir(directory)
 
@@ -74,6 +70,7 @@ class Utility:
             'caitao   23283 23280  0 20:26 pts/4    00:00:00 /bin/sh -c ps -ef | grep tx_text.py\n', 
             'caitao   23285 23283  0 20:26 pts/4    00:00:00 grep tx_text.py\n']
         '''
+        from subprocess import Popen, PIPE
         command = 'ps -ef | grep {}'.format(program)
         p = Popen(command, shell=True, stdout=PIPE)
         p.wait()
@@ -85,6 +82,7 @@ class Utility:
 
     @staticmethod
     def get_command(describe):
+        import platform
         if describe == 'speech':
             if platform.system() == 'Darwin':
                 return 'say'
@@ -101,6 +99,7 @@ class Utility:
     def test_lwan(private_net):
         '''test if the ip of this pc is in private_net
         '''
+        from subprocess import Popen, PIPE
         command = "ifconfig | grep 'inet '"
         p = Popen(command, shell=True, stdout=PIPE)
         p.wait()
@@ -112,6 +111,7 @@ class Utility:
 
     @staticmethod
     def find_pid(program):
+        from subprocess import Popen, PIPE
         command = 'ps -ef | grep {}'.format(program)
         p = Popen(command, shell=True, stdout=PIPE)
         p.wait()
