@@ -98,7 +98,7 @@ class RecordTrainingSample:
 queue_pu  = Queue.Queue()
 
 def ss_sense():
-    # step 2: do the SS sensing, collect the sensing data, record it
+    # do the SS sensing, collect the sensing data, record it
     start = time.time()
     AllRx.sense(sample_iteration, sleep, timestamp)
     print('--> 1 SS sensing time = {}'.format(time.time() - start))
@@ -148,7 +148,7 @@ def restart_pu(pu_list):
                           .format(pu.hostname, pu.ip, pu.x, pu.y, pu.gain)
         p = Popen(ssh_command, shell=True, stdout=PIPE)
         ps.append(p)
-    time.sleep(8)
+    time.sleep(5)  # 4 seconds for the restart, 1 second for network delay
     for p in ps:
         p.kill()   # killing the main process doesn't affect the subprocess it created (at the PU side)
 
@@ -225,9 +225,10 @@ if __name__ == "__main__":
                 else:
                     print 'off ',
             print ''
+            # start the PUs with the new power
             restart_pu(pu_list)
 
-            # first the sensors sense data
+            # the sensors sense data when only the PUs are turned on
             t_ss = threading.Thread(target=ss_sense)
             t_ss.start()
             t_ss.join()
