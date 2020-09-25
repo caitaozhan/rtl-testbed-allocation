@@ -217,7 +217,7 @@
     <key>blocks_file_sink</key>
     <param>
       <key>append</key>
-      <value>False</value>
+      <value>True</value>
     </param>
     <param>
       <key>alias</key>
@@ -241,7 +241,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(952, 268)</value>
+      <value>(936, 268)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -257,7 +257,7 @@
     </param>
     <param>
       <key>unbuffered</key>
-      <value>True</value>
+      <value>False</value>
     </param>
     <param>
       <key>vlen</key>
