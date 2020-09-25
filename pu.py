@@ -23,7 +23,7 @@ class PU:
         '''generate a random gain in a range. note that the PU are heterogeneous
         '''
         if self.name == 'PU1':
-            self.gain = random.randint(64, 70)
+            self.gain = random.randint(66, 72)
         elif self.name == 'PU2':
             self.gain = random.randint(33, 55)
         elif self.name == 'PU3':
