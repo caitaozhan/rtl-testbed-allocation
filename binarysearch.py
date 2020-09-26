@@ -83,13 +83,13 @@ class BinarySearch:
             if self.tx == 'usrp':
                 p_su = Popen(command.split(), stdout=PIPE, stderr=PIPE)
                 time.sleep(2)
-            
+
             # step 2: start the PU/PUR and get all the stdout
             for key, val in pu.items():
                 if self.debug:
                     command = ssh.format(val, key, '-de')
                 else:
-                    command = ssh.format(val, key, '-de')  # BUG?
+                    command = ssh.format(val, key, '')
                 p = Popen(command, shell=True, stdout=PIPE)
                 ps.append((p, command))
             pu_tx_on = []

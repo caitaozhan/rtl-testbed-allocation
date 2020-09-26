@@ -51,8 +51,9 @@ if __name__ == '__main__':
                 sys.stdout.flush()
                 time.sleep(1)
             print ''
-            p.kill()
-        except:
+        except Exception as e:
+            print('something wrong at rx_text_ssh', e)
+        finally:
             p.kill()  # if exception occured, make sure the rtlsdr subprocess will be killed
 
         stderr = p.stderr.readlines()

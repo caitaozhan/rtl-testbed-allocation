@@ -139,7 +139,7 @@ if __name__ == '__main__':
 
     Utility.guarantee_dir(DEFAULT.pu_info_dir)
     with open(DEFAULT.file_transmit, 'w') as f:
-        f.write('hello world')
+        f.write('hello world\n')
 
     if off:
         with open(DEFAULT.pu_info_file, 'w') as f:
