@@ -5,8 +5,11 @@ Utlities
 import os
 import platform
 import math
+import json
 from subprocess import Popen, PIPE
 from mpu import haversine_distance
+from default_config import DEFAULT
+
 
 
 class Utility:
@@ -84,6 +87,21 @@ class Utility:
             return False
 
     @staticmethod
+    def program_is_running_t4():
+        '''T4 has issues for killing the tx-text.py process when it is ran remotely. this issue is causing the program_is_running() function not working
+           so here using an alternative just for T4: reading the pu_info/pu file
+        '''
+        with open(DEFAULT.pu_info_file, 'r') as f:
+            pu_info = json.loads(f.readlines()[0])
+            if pu_info['tx_on'] == 'False':
+                return False
+            elif pu_info['tx_on'] == 'True':
+                return True
+            else:
+                raise Exception("pu_info['tx_on'] value error")
+
+
+    @staticmethod
     def get_command(describe):
         if describe == 'speech':
             if platform.system() == 'Darwin':
@@ -130,5 +148,6 @@ class Utility:
 
 if __name__ == '__main__':
     # print(Utility.program_is_running('tx_text.py'))
-    pid = Utility.find_pid('tx-text.py')
-    print(pid)
+    print(Utility.program_is_running_t4())
+    # pid = Utility.find_pid('tx-text.py')
+    # print(pid)

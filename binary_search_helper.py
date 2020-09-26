@@ -25,7 +25,12 @@ if __name__ == '__main__':
     debug = args.debug
 
     # step 0: check whether the PU transmitter is on
-    if Utility.program_is_running('tx_text.py') is False and Utility.program_is_running('tx-text.py') is False:
+    if hostname == 'T4' and Utility.program_is_running_t4() is False:  # special ad hoc for T4 ...
+        print 'hostname = ', hostname
+        print 'PU TX on = ', False
+        print 'RX disconnect = ', None
+        print 'interfere = ', None
+    elif hostname != 'T4' and Utility.program_is_running('tx_text.py') is False and Utility.program_is_running('tx-text.py') is False:
         print 'hostname = ', hostname
         print 'PU TX on = ', False
         print 'RX disconnect = ', None
