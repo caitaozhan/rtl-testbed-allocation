@@ -3,7 +3,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: Rx Text
-# Generated: Thu Jul 30 01:39:36 2020
+# Generated: Sat Sep 26 23:32:32 2020
 ##################################################
 
 from distutils.version import StrictVersion
@@ -121,7 +121,7 @@ class rx_text(gr.top_block, Qt.QWidget):
           log=False,
           )
         self.blocks_file_sink_0 = blocks.file_sink(gr.sizeof_char*1, '/home/caitao/Project/rtl-testbed-allocation/file_receive', False)
-        self.blocks_file_sink_0.set_unbuffered(True)
+        self.blocks_file_sink_0.set_unbuffered(False)
         self.blks2_packet_decoder_0 = grc_blks2.packet_demod_b(grc_blks2.packet_decoder(
         		access_code='',
         		threshold=-1,
