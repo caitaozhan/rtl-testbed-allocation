@@ -217,7 +217,7 @@
     <key>blocks_file_sink</key>
     <param>
       <key>append</key>
-      <value>True</value>
+      <value>False</value>
     </param>
     <param>
       <key>alias</key>
