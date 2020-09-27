@@ -3,7 +3,6 @@
 '''
 
 import os
-import platform
 import time
 import argparse
 import glob
@@ -98,18 +97,20 @@ class RecordTrainingSample:
 queue_pu  = Queue.Queue()
 
 def ss_sense():
-    # do the SS sensing, collect the sensing data, record it
-    start = time.time()
+    '''do the SS sensing, collect the sensing data, record it
+    '''
     AllRx.sense(sample_iteration, sleep, timestamp)
-    print('--> 1 SS sensing time = {}'.format(time.time() - start))
 
 def ss_collect():
+    '''collect sensor data
+    '''
     start = time.time()
     CollectRx.get_rss_data(sample_iteration)
     print('--> 2.1 SS collect time = {}'.format(time.time() - start))
 
 def pu_info_record():
-    # step 3: collect PU info, record it
+    '''step 3: collect PU info, record it
+    '''
     start = time.time()
     pu_info = CollectTx.get_pu_info()
     queue_pu.put(pu_info)
@@ -154,7 +155,7 @@ def restart_pu(pu_list):
 
 def update_on_off(pu_list):
     print 'turning PU on/off ...'
-    num_on = random.randint(int(len(pu_list)/2), len(pu_list))
+    num_on = random.randint(max(1, int(len(pu_list)/2)), len(pu_list))
     pu_on = sorted(random.sample(range(len(pu_list)), num_on))
     for i in range(len(pu_list)):
         if i in pu_on:
@@ -225,13 +226,23 @@ if __name__ == "__main__":
                 else:
                     print 'off ',
             print ''
-            # start the PUs with the new power
+            # 0. start the PUs with the new power --> 5 seconds here
             restart_pu(pu_list)
+
+            # 1. start the PUR sensing            --> 7 seconds here (in parallel with sensing)
+            pu = binarySearch.read_pu()
+            start_PUR_ssh = "ssh {}@{} 'cd Project/rtl-testbed-allocation && python binary_search_prepare.py'"
+            for key, val in pu.items():
+                Popen(start_PUR_ssh.format(val, key), shell=True, stdout=PIPE)
 
             # the sensors sense data when only the PUs are turned on
             t_ss = threading.Thread(target=ss_sense)
+            start = time.time()
             t_ss.start()
             t_ss.join()
+            delta = time.time() - start
+            print('--> 1 SS sensing time = {}'.format(delta))
+            time.sleep(max(0, 7 - delta))
 
             # collecting Sensing data and PU info, and binary search happen conccurently
             t_ss = threading.Thread(target=ss_collect)
@@ -242,7 +253,7 @@ if __name__ == "__main__":
             # do binary search to get the label (the optimal power)
             start = time.time()
             if su_type == 'hackrf':
-                opt_gain = binarySearch.search(0, 47)
+                opt_gain = binarySearch.search(0, 47)  # around 1 minute
             elif su_type == 'usrp':
                 opt_gain = binarySearch.search(21, 70)
             print '--> 2.3 optimal gain is', opt_gain, 'time = {:2}'.format(time.time() - start)
@@ -250,6 +261,12 @@ if __name__ == "__main__":
             t_ss.join()
             t_pu.join()
 
+            # step -1: end PUR sensing
+            end_PUR_ssh = "ssh {}@{} 'cd Project/rtl-testbed-allocation && python binary_search_prepare_end.py'"
+            for key, val in pu.items():
+                Popen(end_PUR_ssh.format(val, key), shell=True, stdout=PIPE)
+
             pu_info = queue_pu.get()
             record.record_type1(pu_info, opt_gain, su_loc=(x, y))
             record.record_type2(opt_gain, su_loc=(x, y))
+

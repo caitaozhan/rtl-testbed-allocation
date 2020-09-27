@@ -97,3 +97,7 @@ python 2
 
 # host-200 has issues, host 188 no wifi dongle?
 # the issue of PU affecting each other
+
+
+---
+Old version, one iteration typically cost 5 + 6 + 70  ~ 80 seconds

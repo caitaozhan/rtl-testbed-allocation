@@ -64,7 +64,6 @@ class BinarySearch:
         '''This is essentially finding the lower bound
         '''
         pu = self.read_pu()
-        ssh = "ssh {}@{} 'cd Project/rtl-testbed-allocation && python binary_search_helper.py -t 10 {}'"
         if self.tx == 'hackrf':
             su  = "hackrf_transfer -f {} -x {} -a 1 -c 60".format(DEFAULT.tx_freq, '{}')
         elif self.tx == 'usrp':
@@ -82,14 +81,12 @@ class BinarySearch:
                 p_su = Popen(command, shell=True, stdout=PIPE, stderr=PIPE)
             if self.tx == 'usrp':
                 p_su = Popen(command.split(), stdout=PIPE, stderr=PIPE)
-                time.sleep(2)
+            time.sleep(3)  # SDR delay
 
             # step 2: start the PU/PUR and get all the stdout
+            ssh = "ssh {}@{} 'cd Project/rtl-testbed-allocation && python binary_search_helper.py {}'"
             for key, val in pu.items():
-                if self.debug:
-                    command = ssh.format(val, key, '-de')
-                else:
-                    command = ssh.format(val, key, '')
+                command = ssh.format(val, key, '')
                 p = Popen(command, shell=True, stdout=PIPE)
                 ps.append((p, command))
             pu_tx_on = []
@@ -112,16 +109,16 @@ class BinarySearch:
                 ps = new_ps
                 time.sleep(0.1)
             if self.tx == 'hackrf':
-                p_su.kill()  # BUG to fix
+                p_su.kill()
             if self.tx == 'usrp':
                 kill = ['sudo', 'kill', str(p_su.pid+1)]
                 # print(kill)
                 Popen(kill, stdout=PIPE).wait()
 
             # step 3: get the PU/PUR interfere results and update low or high
-            # if 'False' in pu_tx_on:
-            #     print('exit PU TX off')
-            #     return -1
+            if 'False' in pu_tx_on:
+                print('exit PU TX off')
+                return -1
             if 'True' in pur_disconnect:
                 print('exit PUR disconnected')
                 return -1
@@ -129,6 +126,7 @@ class BinarySearch:
                 high = mid - 1
             else: # no interfere
                 low = mid
+
         return low
 
 
@@ -142,5 +140,5 @@ def usrp():
 
 
 if __name__ == '__main__':
-    # hackrf()
-    usrp()
+    hackrf()
+    # usrp()

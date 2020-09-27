@@ -3,6 +3,10 @@ import time
 
 
 if __name__ == '__main__':
+
+    lt = time.localtime()
+    lt2 = time.localtime()
+
     description = 'Update the file to transmit with the latest time stamp. Hint: python file_transmit.py -n 2'
 
     parser = argparse.ArgumentParser(description = description)
