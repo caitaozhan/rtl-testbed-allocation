@@ -30,7 +30,7 @@ class TestInterfere:
                     except:
                         pass
                 i += 1
-                if i >= 100:
+                if i >= 20:
                     break
         return True
 
