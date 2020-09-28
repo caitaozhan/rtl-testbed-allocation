@@ -230,6 +230,7 @@ if __name__ == "__main__":
             restart_pu(pu_list)
 
             # 1. start the PUR sensing            --> 7 seconds here (in parallel with sensing)
+            print 'restart the PUR...'
             pu = binarySearch.read_pu()
             start_PUR_ssh = "ssh {}@{} 'cd Project/rtl-testbed-allocation && python binary_search_prepare.py'"
             for key, val in pu.items():

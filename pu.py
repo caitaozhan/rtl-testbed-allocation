@@ -25,9 +25,9 @@ class PU:
         if self.name == 'PU1':
             self.gain = random.randint(66, 72)
         elif self.name == 'PU2':
-            self.gain = random.randint(33, 55)
+            self.gain = random.randint(35, 55)
         elif self.name == 'PU3':
-            self.gain = random.randint(33, 55)
+            self.gain = random.randint(35, 55)
         elif self.name == 'PU4':
             self.gain = random.randint(45, 60)
         else:

@@ -4,6 +4,7 @@
 import time
 from subprocess import Popen, PIPE
 from default_config import DEFAULT
+from utility import Utility
 
 class BinarySearch:
     '''
@@ -60,6 +61,16 @@ class BinarySearch:
     def print_extract(self, extract):
         print 'hostname:{}  '.format(extract['hostname']),  'interfere:{}  '.format(extract['interfere']), 'RX disconnect:{}  '.format(extract['disconnect']), 'PU TX on:{}  '.format(extract['pu_tx_on'])
 
+    def kill_hackrf(self):
+        # step 1: find the pid
+        program = 'hackrf_transfer'
+        pids = Utility.find_pid(program)
+        # step 2: kill the previous program if pid is not -1
+        if pids != -1:
+            for pid in pids:
+                command = 'kill {}'.format(pid).split()
+                Popen(command)
+
     def search(self, low, high):
         '''This is essentially finding the lower bound
         '''
@@ -75,13 +86,14 @@ class BinarySearch:
         while low < high:
             # step 1: start the SU transmitter
             mid = (low + high + 1) // 2    # + 1 is the key for finding the lower bound
-            print('\n--> low={}, mid={}, high={}'.format(low, mid, high))
+            print '\n--> low={}, mid={}, high={}  '.format(low, mid, high),
             command = su.format(mid)
             if self.tx == 'hackrf':
                 p_su = Popen(command, shell=True, stdout=PIPE, stderr=PIPE)
             if self.tx == 'usrp':
                 p_su = Popen(command.split(), stdout=PIPE, stderr=PIPE)
             time.sleep(3)  # SDR delay
+            print 'checking interfere ...'
 
             # step 2: start the PU/PUR and get all the stdout
             ssh = "ssh {}@{} 'cd Project/rtl-testbed-allocation && python binary_search_helper.py {}'"
@@ -107,12 +119,11 @@ class BinarySearch:
                     else:
                         new_ps.append((p, command))      # still running
                 ps = new_ps
-                time.sleep(0.1)
+                time.sleep(0.05)
             if self.tx == 'hackrf':
-                p_su.kill()
+                self.kill_hackrf()
             if self.tx == 'usrp':
                 kill = ['sudo', 'kill', str(p_su.pid+1)]
-                # print(kill)
                 Popen(kill, stdout=PIPE).wait()
 
             # step 3: get the PU/PUR interfere results and update low or high
