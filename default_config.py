@@ -49,9 +49,11 @@ class DEFAULT:
     success_average       = 100
     pu_info_dir           = 'pu_info'
     pu_info_file          = 'pu_info/pu'
+    pur_info_file         = 'pu_info/pur'
     su_type1_data         = 'training/su_pu'  # with SU info and PU data
     su_type2_data         = 'training/su_ss'  # with SU info and SS data
     file_transmit         = 'file_transmit'
+    file_receive          = 'file_receive'
     su_same_loc_repeat    = 3
 
 class MAP:

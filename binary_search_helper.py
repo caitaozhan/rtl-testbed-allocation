@@ -1,27 +1,24 @@
 '''The binary search helper is ran on the {PU/PUR side}
+run time is ~0.1 second
 '''
 
 import argparse
-import time
 import sys
 import os
 from subprocess import Popen, PIPE
 from test_interfere import TestInterfere
 from utility import Utility
 from default_config import DEFAULT
-
+import json
 
 if __name__ == '__main__':
 
-    hint = 'python binary_search_helper.py -t 10'
+    hint = 'python binary_search_helper.py'
 
     parser = argparse.ArgumentParser(description='this is the program that the binary search program will call ' + hint)
     parser.add_argument('-f', '--file', type=str, nargs=1, default=['file_receive'], help='the filename that where the receiver store received text')
-    parser.add_argument('-de', '--debug', action='store_true', help='print stderr')
     args = parser.parse_args()
-
     hostname = os.uname()[1]  # T3
-    debug = args.debug
 
     # step 0: check whether the PU transmitter is on
     if hostname == 'T4' and Utility.program_is_running_t4() is False:  # special ad hoc for T4 ...
@@ -38,7 +35,10 @@ if __name__ == '__main__':
         filename = args.file[0]
         testinter = TestInterfere(filename)
         interfere = testinter.test_interfere()
+        with open(DEFAULT.pur_info_file, 'r') as f:
+            lines = f.readlines()
+            pur_info = json.loads(lines[0])
         print 'hostname = ', hostname
         print 'PU TX on = ', True
-        print '\nRX disconnect = ', False
+        print '\nRX disconnect = ', True if pur_info['discon'] == 'True' else False 
         print 'interfere = ', interfere
