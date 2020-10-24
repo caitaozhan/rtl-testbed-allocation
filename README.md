@@ -28,6 +28,10 @@ testbed related stuffs.
 6) ssh: give my destop's ssh to odroid, give odroid's ssh to my github account.
 7) git clone git@github.com:caitaozhan/rtl-testbed.git
 
+## Install gr-osmosdr
+1) [gr-osmodr](https://osmocom.org/projects/gr-osmosdr/wiki/GrOsmoSDR). git checkout gr3.7
+2) [CSDN blog](https://blog.csdn.net/sinat_38431275/article/details/77367773): install extensions of gnuradio, including librtlsdr-dev etc.
+
 NOTE: 08/20/2019. The odroid C2 18.04 has issues with python and git. Archiconda might help. Git cannot be installed.
 
 ## Crowdsourced (Ideas)
