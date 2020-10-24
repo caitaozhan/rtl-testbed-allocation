@@ -82,22 +82,42 @@ python 2
 [A master thesis](http://oa.upm.es/21618/1/TESIS_MASTER_LEI_ZHANG.pdf)
 
 
-# increase the interfere bar, not lower
-# decrease the distance between PU and PUR, so I can lower the PU gain
+---
 
-# the first colomn of the data is number of PU
-# automate the PU commands
-# the lenovo laptop is "weaker" than others
+increase the interfere bar, not lower
+decrease the distance between PU and PUR, so I can lower the PU gain
 
-# did hackrf T3 deteriate? need to re-calibrate all the TXs
-# the small cart, remove the middle level
-# test the sensor with two antenna, when TX is tx_text. Is it different than tx-run?
-# mac terminator-like stuff?
-# antenna being long better?
+the first colomn of the data is number of PU
+automate the PU commands
+the lenovo laptop is "weaker" than others
 
-# host-200 has issues, host 188 no wifi dongle?
-# the issue of PU affecting each other
+did hackrf T3 deteriate? need to re-calibrate all the TXs
+the small cart, remove the middle level
+test the sensor with two antenna, when TX is tx_text. Is it different than tx-run?
+mac terminator-like stuff?
+antenna being long better?
+
+host-200 has issues, host 188 no wifi dongle?
+the issue of PU affecting each other
 
 
 ---
 Old version, one iteration typically cost 5 + 6 + 70  ~ 80 seconds
+
+---
+
+10/20/2020
+When PU4 and PUR4 is maximum distance, ~3.8 meters, apart using the extension cord, 
+then the minimal gain for PU needs to be ~75 in order to let PUR receive text. 
+Now the sensor readings is -89.7 dB.
+The SU is also 3.8 meters away from the PUR, SU's gain needs to be 16 in order to create interfere
+
+PU | PU-PUR distance | PU gain | SS reading w/o SU | SU min gain to interfere
+1  | 3.8             | 85      | -88.4             | 16 @ 3.8
+1  | 3.8             | 75      | -89.7             | 9  @ 3.8
+1  | 2               | 85      | -87.2             | 27 @ 2, 36 @ 6, 40 @ 8
+1  | 2               | 75      | -89.6             | 13 @ 2, 26 @ 6, 35 @ 8
+1  | 2               | 65      | -89.9             | 2  @ 2, 2  @ 6, 5  @ 8
+1  | 1               | 85      | -79.4             | 23 @ 2, 38 @ 6, 40 @ 8
+1  | 1               | 75      | -87.1             |  @ 2,  @ 6,  @ 8
+1  | 1               | 62      | -89.9             |  @ 2,  @ 6,  @ 8

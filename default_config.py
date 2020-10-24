@@ -54,7 +54,7 @@ class DEFAULT:
     su_type2_data         = 'training/su_ss'  # with SU info and SS data
     file_transmit         = 'file_transmit'
     file_receive          = 'file_receive'
-    su_same_loc_repeat    = 3
+    su_same_loc_repeat    = 10
 
 class MAP:
     name       = ''

@@ -49,7 +49,7 @@ class RecordTrainingSample:
         pu_dict = {}
         for pu in pu_info:
             pu_dict[pu['hostname']] = pu
-        pu_list = ['T1', 'T2', 'T3', 'T4']
+        pu_list = ['T1', 'T2', 'T3', 'T4', 'T5']
         with open(self.type1_file, 'a') as f:
             counter = 0
             for pu in pu_list:
@@ -90,7 +90,7 @@ class RecordTrainingSample:
                     print('sensor {} has no data'.format(s))
                     f.write('nan, ')
                 else:
-                    f.write('{:.2f}, '.format(np.mean(rx_data[s])))
+                    f.write('{:.5f}, '.format(np.mean(rx_data[s])))
             f.write('{:.1f}, {:.1f}, {}\n'.format(float(su_loc[0]), float(su_loc[1]), opt_gain))
 
 
@@ -149,7 +149,7 @@ def restart_pu(pu_list):
                           .format(pu.hostname, pu.ip, pu.x, pu.y, pu.gain)
         p = Popen(ssh_command, shell=True, stdout=PIPE)
         ps.append(p)
-    time.sleep(5)  # 4 seconds for the restart, 1 second for network delay
+    time.sleep(7)  # 4 seconds for the restart, 1 second for network delay
     for p in ps:
         p.kill()   # killing the main process doesn't affect the subprocess it created (at the PU side)
 
@@ -230,7 +230,7 @@ if __name__ == "__main__":
             restart_pu(pu_list)
 
             # 1. start the PUR sensing            --> 7 seconds here (in parallel with sensing)
-            print 'restart the PUR...'
+            print 'start the PUR...'
             pu = binarySearch.read_pu()
             start_PUR_ssh = "ssh {}@{} 'cd Project/rtl-testbed-allocation && python binary_search_prepare.py'"
             for key, val in pu.items():
@@ -243,7 +243,7 @@ if __name__ == "__main__":
             t_ss.join()
             delta = time.time() - start
             print('--> 1 SS sensing time = {}'.format(delta))
-            time.sleep(max(0, 7 - delta))
+            time.sleep(max(0, 8 - delta))
 
             # collecting Sensing data and PU info, and binary search happen conccurently
             t_ss = threading.Thread(target=ss_collect)
@@ -266,7 +266,7 @@ if __name__ == "__main__":
             end_PUR_ssh = "ssh {}@{} 'cd Project/rtl-testbed-allocation && python binary_search_prepare_end.py'"
             for key, val in pu.items():
                 Popen(end_PUR_ssh.format(val, key), shell=True, stdout=PIPE)
-
+            print('end PUR')
             pu_info = queue_pu.get()
             record.record_type1(pu_info, opt_gain, su_loc=(x, y))
             record.record_type2(opt_gain, su_loc=(x, y))

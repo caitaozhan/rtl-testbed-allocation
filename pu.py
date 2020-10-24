@@ -22,16 +22,16 @@ class PU:
     def generate_gain(self):
         '''generate a random gain in a range. note that the PU are heterogeneous
         '''
-        if self.name == 'PU1':
-            self.gain = random.randint(66, 72)
+        if self.name == 'PU1' or self.name == 'PU5':  # PU5 TX's power is weak. PU RX is easy to stop receiving when power is low
+            self.gain = random.randint(75, 85)        # PU5 TX and RX need to be close to each other
         elif self.name == 'PU2':
-            self.gain = random.randint(35, 55)
-        elif self.name == 'PU3':
-            self.gain = random.randint(35, 55)
+            self.gain = random.randint(75, 85)
+        elif self.name == 'PU3':                      # PU3 is very strong
+            self.gain = random.randint(45, 50)
         elif self.name == 'PU4':
-            self.gain = random.randint(45, 60)
+            self.gain = random.randint(55, 68)
         else:
-            print("this PU name doesn't exits")
+            print("this PU name {} doesn't exits".format(self.name))
 
 if __name__ == '__main__':
     pu = PU('1.1.1.1', 'caitao', 0, 0, 0, True)

@@ -92,7 +92,7 @@ class BinarySearch:
                 p_su = Popen(command, shell=True, stdout=PIPE, stderr=PIPE)
             if self.tx == 'usrp':
                 p_su = Popen(command.split(), stdout=PIPE, stderr=PIPE)
-            time.sleep(3)  # SDR delay
+            time.sleep(3.5)  # SDR delay
             print 'checking interfere ...'
 
             # step 2: start the PU/PUR and get all the stdout
@@ -127,9 +127,6 @@ class BinarySearch:
                 Popen(kill, stdout=PIPE).wait()
 
             # step 3: get the PU/PUR interfere results and update low or high
-            if 'False' in pu_tx_on:
-                print('exit PU TX off')
-                return -1
             if 'True' in pur_disconnect:
                 print('exit PUR disconnected')
                 return -1
