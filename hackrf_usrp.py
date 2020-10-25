@@ -34,26 +34,26 @@ class Data:
 
 if __name__ == '__main__':
     data = Data()
-    inputfile  = 'training/su_pu_cleaned'
-    outputfile = 'training/su_pu_cleaned_usrp'
-    with open(inputfile, 'r') as inf, open(outputfile, 'w') as outf:
-        for line in inf:
-            print(line)
-            line = line.split()
-            hackrf = line[-1]
-            usrp = data.reg.predict([[int(hackrf)]])
-            line[-1] = str(int(round(usrp[0])))
-            line = ' '.join(line)
-            outf.write(line + '\n')
+    # inputfile  = 'training/su_pu_cleaned'
+    # outputfile = 'training/su_pu_cleaned_usrp'
+    # with open(inputfile, 'r') as inf, open(outputfile, 'w') as outf:
+    #     for line in inf:
+    #         print(line)
+    #         line = line.split()
+    #         hackrf = line[-1]
+    #         usrp = data.reg.predict([[int(hackrf)]])
+    #         line[-1] = str(int(round(usrp[0])))
+    #         line = ' '.join(line)
+    #         outf.write(line + '\n')
 
-    inputfile  = 'training/su_ss_cleaned'
-    outputfile = 'training/su_ss_cleaned_usrp'
-    with open(inputfile, 'r') as inf, open(outputfile, 'w') as outf:
-        for line in inf:
-            print(line)
-            line = line.split()
-            hackrf = line[-1]
-            usrp = data.reg.predict([[int(hackrf)]])
-            line[-1] = str(int(round(usrp[0])))
-            line = ' '.join(line)
-            outf.write(line + '\n')
+    # inputfile  = 'training/su_ss_cleaned'
+    # outputfile = 'training/su_ss_cleaned_usrp'
+    # with open(inputfile, 'r') as inf, open(outputfile, 'w') as outf:
+    #     for line in inf:
+    #         print(line)
+    #         line = line.split()
+    #         hackrf = line[-1]
+    #         usrp = data.reg.predict([[int(hackrf)]])
+    #         line[-1] = str(int(round(usrp[0])))
+    #         line = ' '.join(line)
+    #         outf.write(line + '\n')
