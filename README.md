@@ -1,14 +1,6 @@
 # rtl-testbed
 testbed related stuffs.
 
-# TODO
-1. sensor 140, 160 seems to have lower RSS than others
-2. some antennas are loose
-3. outdoor localize algo: tx and rx same, RSS can be somewhat different
-2. Plot (data preparation stage done)
-3. 9.27 task: {1,2,3} Tx experiment with interpolated training data, train again to test the interpolation error (interpolation error is not done)
-
-
 ## Setup USRP
 1) Go to [website](https://kb.ettus.com/Building_and_Installing_the_USRP_Open-Source_Toolchain_(UHD_and_GNU_Radio)_on_Linux). A large list of packages to install
 2) sudo apt-get install uhd*
